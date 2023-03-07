@@ -8,9 +8,9 @@ const store = useStore();
 
 const address = computed(() => store.state.address);
 const positionsList = computed(() => store.state.positionsList || [])
-console.log("address", address);
-console.log("positionsList", positionsList);
-console.log("positionsList", positionsList.value.length);
+// console.log("address", address);
+// console.log("positionsList", positionsList);
+// console.log("positionsList", positionsList.value.length);
 
 const activeName = ref("position");
 // const positionsList = ref([]);
@@ -27,7 +27,7 @@ function handleTabClick() {
       prefix: activeName.value === "position" ? "active" : "history",
     },
   })
-  console.log('val', activeName.value)
+  // console.log('val', activeName.value)
   store.dispatch('getPositions', {prefix: activeName.value !== "position" ? "active" : "history"})
 }
 

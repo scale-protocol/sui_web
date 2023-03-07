@@ -110,7 +110,7 @@ const timeTypeActive = ref('1D')
 const timeType = ref(['1H', '1D', '1W', '1M', '1Y'])
 
 function switchTime (i: string) {
-  console.log(i)
+  // console.log(i)
   timeTypeActive.value = i
   getChartDataAndDraw(chartTypeActive.value)
 }

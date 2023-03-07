@@ -36,8 +36,8 @@ const ModuleWs = {
       // 连接关闭时停掉心跳消息
       clearInterval(state.heartBeatTimer);
       state.heartBeatTimer = 0;
-      console.log("连接已断开: " + new Date());
-      console.log(event);
+      // console.log("连接已断开: " + new Date());
+      // console.log(event);
     },
 
     // 发生错误

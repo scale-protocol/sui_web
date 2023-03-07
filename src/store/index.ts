@@ -56,7 +56,7 @@ const store = createStore<State>({
     },
 
     SET_USERINFO (state, payload) {
-      console.log('SET_USERINFO', payload)
+      // console.log('SET_USERINFO', payload)
       state.userInfo = payload
     },
 
