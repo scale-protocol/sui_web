@@ -1,0 +1,80 @@
+/* .el-form.sty1 .el-form-item.is-required:not(.is-no-asterisk).asterisk-left>.el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk).asterisk-left>.el-form-item__label:before {
+  display: none;
+}
+
+.el-form.sty1 .el-form-item {
+  width: 100%;
+}
+.el-form.sty1 .el-form-item__label {
+  line-height: 140%;
+  color: var(--color-text-7);
+}
+.el-form.sty1 .el-form-item__content {
+  line-height: 48px;
+}
+.el-form.sty1 .el-input__wrapper {
+  background: var(--color-background-10);
+  border-radius: 40px;
+  box-shadow: none;
+  padding: 0 20px;
+}
+.el-form.sty1 .el-form-item.is-error .el-input__wrapper {
+  box-shadow: 0 0 0 1px var(--color-text-12) inset;
+}
+.el-form.sty1 .el-input__inner {
+  height: 48px;
+}
+
+.el-form.sty1 .el-form-item__error {
+  line-height: 140%;
+  padding-top: 8px;
+  color: var(--color-text-12);
+} */
+
+.el-input--large {
+  height: 48px;
+  line-height: 48px;
+}
+
+.el-form.sty1-form .el-form-item {
+  position: relative;
+}
+.el-form.sty1-form .el-form-item .el-form-item__label {
+  /* background: #fff;
+  background: #FAFAFA; */
+  background: rgba(255, 255, 255, 0.16);
+  position: absolute;
+  top: -11px;
+  z-index: 1;
+  left: 10px;
+  padding: 0 4px;
+}
+
+.el-form.sty1-form .el-form-item .el-input__wrapper {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: none;
+  background: #FAFAFA;
+}
+
+.el-form.sty1-form .el-form-item .el-input {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.2);
+}
+.el-form.sty1-form  .el-input-number {
+  width: 100%;
+}
+
+
+
+.el-input.sty1-input .el-input__inner {
+  border: none;
+  font-family: 'Nunito';
+  font-size: 16px;
+  line-height: 20px;
+  background-color: transparent;
+  text-align: right;
+  outline: none;
+}

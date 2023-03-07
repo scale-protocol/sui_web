@@ -1,0 +1,158 @@
+.mico-global {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url('@/assets/img/mico-global.png') no-repeat;
+  background-size: 24px;
+}
+
+.mico-arrow-right {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: url('@/assets/img/mico-arrow-right.png') no-repeat;
+  background-size: 12px;
+}
+
+.mico-success {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: url('@/assets/img/mico-success.png') no-repeat;
+  background-size: 12px;
+}
+
+.sty1-gp {
+  li {
+    font-family: 'Nunito';
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.04em;
+    color: #000000;
+    padding: 6px 12px;
+
+    &.active {
+      font-weight: 700;
+    }
+  }
+}
+
+.sty2-gp {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+.sty3-gp {
+  margin-top: 8px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+  font-family: 'Nunito';
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.2);
+
+  .active {
+    height: 20px;
+    background: #000000;
+    border-radius: 4px;
+    color: #fff;
+  }
+}
+
+.sty4-gp {
+  margin-top: 22px;
+  font-family: 'Nunito';
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+
+  li+li {
+    margin-top: 12px;
+  }
+
+  .green {
+    color: #41BA63;
+  }
+}
+
+.sty5-gp {
+  padding-bottom: 24px;
+
+  li {
+    padding: 10px 12px;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+
+    .img-logo {
+      width: 32px;
+      height: 32px;
+    }
+
+    .t1 {
+      font-family: 'Nunito';
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 20px;
+      letter-spacing: -0.04em;
+      color: #000000;
+      margin-left: 12px;
+    }
+
+    .img-arrow {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  li+li {
+    margin-top: 12px;
+  }
+}
+
+.wallet-info {
+  font-family: 'Nunito';
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.75);
+  margin-bottom: 20px;
+
+  .pubkey {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 21px;
+    padding: 6px 6px 6px 10px;
+    font-size: 12px;
+    line-height: 16px;
+    color: #000000;
+
+    img {
+      margin-left: 2px;
+      width: 12px;
+      height: 12px;
+    }
+  }
+}
+
+.sty1-tip {
+  font-family: 'Nunito';
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 8px;
+}
+
+.wallet-tip {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+  margin-top: 8px;
+}

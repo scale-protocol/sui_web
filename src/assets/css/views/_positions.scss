@@ -1,0 +1,157 @@
+.position {
+  position: relative;
+  z-index: 99;
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 0 20px;
+
+  .inner-position {
+    background-color: #fff;
+    border-radius: 12px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+
+  .header-title {
+    padding: 24px 20px;
+  }
+
+  .funnel {
+    font-family: 'Nunito';
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: -0.04em;
+    color: #000000;
+    position: relative;
+    padding-right: 24px;
+
+    &::after {
+      content: '';
+      width: 1px;
+      height: 11px;
+      background-color: rgba(0, 0, 0, 0.05);
+      position: absolute;
+      right: 12px;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+    }
+
+    .img-funnel {
+      width: 20px;
+      height: 20px;
+      margin-right: 4px;
+    }
+
+    .img-arrow {
+      margin-left: 2px;
+      width: 12px;
+      height: 12px;
+      transform: rotate(90deg);
+    }
+  }
+
+  .profit {
+    font-family: 'Nunito';
+    font-size: 16px;
+    line-height: 20px;
+
+    span:nth-child(1) {
+      color: rgba(0, 0, 0, 0.45);
+      margin-right: 6px;
+    }
+
+    .green {
+      color: #41BA63;
+      font-weight: 700;
+    }
+  }
+
+  .nodata {
+    padding: 48px 0 99px;
+    font-family: 'Nunito';
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.04em;
+    color: rgba(0, 0, 0, 0.45);
+
+    .img-nodata {
+      width: 180px;
+      height: 180px;
+      background: url('@/assets/img/no-record.png') no-repeat;
+      background-size: 180px 180px;
+      margin-bottom: 12px;
+    }
+    .img-nowallet {
+      width: 180px;
+      height: 180px;
+      background: url('@/assets/img/img-nowallet.png') no-repeat;
+      background-size: 180px 180px;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+.order-num {
+  img {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+  }
+}
+
+.green {
+  color: #41BA63;
+}
+
+.red {
+  color: #E76464;
+}
+
+.leverage {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 21px;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.process {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+  margin-top: 8px;
+
+  li {
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.2);
+    height: 20px;
+    cursor: pointer;
+
+    &.active {
+      color: #fff;
+      background: #000000;
+      border-radius: 4px;
+    }
+  }
+}
+
+.profit-ul {
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(0, 0, 0, 0.45);
+  padding-top: 10px;
+
+  li {
+    margin-top: 12px;
+  }
+
+  .green {
+    color: #41BA63;
+  }
+}

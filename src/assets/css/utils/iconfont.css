@@ -1,0 +1,147 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3864722 */
+  src: url('@/assets/css/fonts/iconfont.woff2') format('woff2'),
+       url('@/assets/css/fonts/iconfont.woff') format('woff'),
+       url('@/assets/css/fonts/iconfont.ttf') format('truetype');
+}
+
+[class*="popico-"], [class^=popico-] {
+  font-family: "iconfont" !important;
+  font-style: normal;
+  font-weight: 400;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: baseline;
+  display: inline-block;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.popico-success:before {
+  content: "\e73c";
+}
+
+.popico-warn:before {
+  content: "\e73d";
+}
+
+.popico-error:before {
+  content: "\e73e";
+}
+
+.popico-refresh-ccw-clock:before {
+  content: "\e610";
+}
+
+.popico-circle-check:before {
+  content: "\e611";
+}
+
+.popico-square-user-check:before {
+  content: "\e612";
+}
+
+.popico-camera:before {
+  content: "\e60d";
+}
+
+.popico-arrow-up-from-arc:before {
+  content: "\e60e";
+}
+
+.popico-square-user1:before {
+  content: "\e60f";
+}
+
+.popico-copy:before {
+  content: "\e60a";
+}
+
+.popico-refresh-ccw-alt:before {
+  content: "\e60b";
+}
+
+.popico-window:before {
+  content: "\e60c";
+}
+
+.popico-back:before {
+  content: "\e73b";
+}
+
+.popico-car-side:before {
+  content: "\e609";
+}
+
+.popico-bolt:before {
+  content: "\e602";
+}
+
+.popico-dial-low:before {
+  content: "\e603";
+}
+
+.popico-image-polaroid-user:before {
+  content: "\e604";
+}
+
+.popico-images-user:before {
+  content: "\e605";
+}
+
+.popico-search-alt:before {
+  content: "\e606";
+}
+
+.popico-image-portrait:before {
+  content: "\e607";
+}
+
+.popico-credit-card-scan:before {
+  content: "\e608";
+}
+
+.popico-globe-alt:before {
+  content: "\e601";
+}
+
+.popico-face-id:before {
+  content: "\e600";
+}
+
+.popico-lock:before {
+  content: "\e73a";
+}
+
+.popico-zkme:before {
+  content: "\e736";
+}
+
+.popico-anonymous:before {
+  content: "\e737";
+}
+
+.popico-self-sovereign:before {
+  content: "\e738";
+}
+
+.popico-selective:before {
+  content: "\e739";
+}
+
+.popico-square-user:before {
+  content: "\e732";
+}
+
+.popico-face-smile:before {
+  content: "\e733";
+}
+
+.popico-id-card:before {
+  content: "\e734";
+}
+
+.popico-close:before {
+  content: "\e735";
+}

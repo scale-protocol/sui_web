@@ -1,0 +1,11 @@
+.section {
+  max-width: 1440px;
+  min-width: 1270px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+.section-1 {
+  width: 1200px;
+  margin: 0 auto;
+}

@@ -1,0 +1,64 @@
+.mt24 {
+  margin-top: 24px;
+}
+
+.others {
+  font-size: 12px;
+  line-height: 140%;
+  width: 100%;
+}
+.others li:nth-child(2n + 1) {
+  width: 120px;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.others li:nth-child(2n) {
+  color: var(--color-text-7);
+  opacity: 0.8;
+}
+
+.others li:nth-child(2n) {
+  margin: 0 10px;
+}
+
+.others-login {
+  margin: 20px 0;
+}
+.others-login li {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #F6F6F6;
+}
+.others-login li + li {
+  margin-left: 30px;
+}
+.others-login li img {
+  width: 24px;
+  height: 24px;
+}
+
+.sign-btn {
+  width: 260px;
+  height: 48px;
+  background: var(--color-theme);
+  border-radius: 30px;
+  font-weight: 500;
+  line-height: 48px;
+  color: #FFFFFF;
+  margin-top: 16px;
+}
+
+.d-app {
+  margin: 20px 0;
+  font-size: 12px;
+  line-height: 140%;
+  text-align: center;
+  color: var(--color-text-7);
+}
+.d-app span {
+  color: var(--color-text-9);
+  cursor: pointer;
+  text-decoration: underline;
+}

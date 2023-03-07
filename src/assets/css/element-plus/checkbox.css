@@ -1,0 +1,32 @@
+.el-checkbox.sty1 {
+  white-space: pre-wrap;
+}
+.el-checkbox.sty1 .el-checkbox__label {
+  font-size: 10px;
+  line-height: 140%;
+  letter-spacing: -0.6px;
+  padding-left: 12px;
+}
+.el-checkbox.sty1 .el-checkbox__input .el-checkbox__inner {
+  border-radius: 50%;
+  border: 1.2px solid var(--color-theme);
+  padding: 1px;
+  transform: none;
+  transition: none;
+}
+
+.el-checkbox.sty1 .el-checkbox__input.is-checked .el-checkbox__inner::after {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border: none;
+  background-color: var(--color-background);
+  border-radius: 50%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  transform: none;
+}

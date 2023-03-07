@@ -1,0 +1,12 @@
+.sty1-lab {
+  text-align: center;
+}
+
+.sty1-title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  color: var(--color-text-9);
+  padding-top: 12px;
+}

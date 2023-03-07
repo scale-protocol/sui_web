@@ -1,0 +1,5 @@
+html:root {
+  --el-color-primary: var(--vt-c-primary-1);
+  --el-font-family: var(--vt-ff-harmony);
+  --el-border-radius-base: 8px;
+}

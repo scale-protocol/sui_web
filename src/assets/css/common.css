@@ -1,0 +1,83 @@
+
+/* 溢出显示省略号
+-------------------------- */
+.txt-ovfl {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-right: 10px;
+}
+.txt-ovfl.nopadd {
+  padding-right: 0;
+}
+
+.txt-ovfl-row {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  padding-right: 10px;
+}
+.txt-ovfl-row.nopadd {
+  padding-right: 0;
+}
+.txt-ovfl-row.row2 {
+  -webkit-line-clamp: 2;
+}
+.txt-ovfl-row.row6 {
+  -webkit-line-clamp: 6;
+}
+
+/* 按钮点击效果
+-------------------------- */
+.taplight, .taplight-bf {
+  position:relative;
+  cursor: pointer;
+  user-select: none;
+}
+.taplight:not(.invalid)::after,
+.taplight-bf:not(.invalid)::before {
+  content:"";
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:100%;
+  height:100%;
+  border: inherit;
+  border-radius: inherit;
+  border-color: #000;
+  transform: translate(-50%,-50%);
+  pointer-events:none;
+  transition:opacity .4s ease;
+  background: #000;
+  opacity: 0;
+}
+
+.taplight.invalid,
+.taplight-bf.invalid {
+  cursor: default;
+}
+.taplight:active::after,
+.taplight-bf:active::before {
+  opacity: 0.13;
+  transition-duration:0s;
+}
+
+.taplight2 {
+  transition:opacity .4s ease .05s;
+  user-select: none;
+  cursor: pointer;
+}
+
+.taplight3 {
+  user-select: none;
+  cursor: pointer;
+}
+.taplight3 .tap-chd {
+  transition:opacity .4s ease .05s;
+}
+.taplight2:active:not(.is-disabled),
+.taplight3:active .tap-chd {
+  opacity:.4;
+  transition-duration:0s;
+  transition-delay: 0s;
+}
