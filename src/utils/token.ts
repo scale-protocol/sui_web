@@ -1,28 +1,28 @@
 // 带有_COIN的是关于代币 Scale 币的参数，不带的是关于合约的参数
 
 // Scale coin
-export const CONIN_PACKAGE_OBJECTID = '0x86e277713de9707e17b445e909a2ea3e5fcaff55'
+export const CONIN_PACKAGE_OBJECTID = '0x5307dd797ba69595e2514e6f1c77c66a7b53cd6b'
 export const CONIN_MODULE = 'scale'
-export const CONIN_ADMIN_CAP = '0x4819666f33006282f7bfae519204e1e3e9ccd0bf'
-export const CONIN_RESERVE = '0x2d9373f97daffbfdc5f87da5b8045813418dcecc'
+export const CONIN_ADMIN_CAP = '0xf36917ee629d6d05cd93af637842099f9a77faa7'
+export const CONIN_RESERVE = '0x23054fafaa6b32c3e3fd94658d84c4fc7c2d8f1a'
 
 // Scale 主合约
-export const PACKAGE_OBJECTID = '0x15d9193e89913862b4f23b7d4ee8b3da9208971a'
+export const PACKAGE_OBJECTID = '0xef5f2f606575defd9859ce4ba00850c5c9d74270'
 export const MODULE = 'enter'
-export const ADMIN_CAP = '0xf85ad87aaf14e2c850439a5919eeffc304a88169'
-export const SCALE_NFT_FACTORY = '0xab969341144c79a7241ec53ab3ae458ac5ff8387'
-export const MARKET_LIST = '0x4b4d687513341322dc6512c231c7de3ff6eb2dec'
+export const ADMIN_CAP = '0x9a4bfa7f5220e9c0e8386b0f9aaf1bd6485c0ab2'
+export const SCALE_NFT_FACTORY = '0xcab3f6001d054b0607feea5806d458c5174d052e'
+export const MARKET_LIST = '0xed8c0a6ab74607940bc5a39fa941eeccbb0af481'
 
-export const MARKET = '0x35d4a184421ca138c551b7eae080efd5b65bff13'  // 需要从 market 列表里面拿，不能写死哦~
+export const MARKET = '0xc869a568247b2992355eeb2964f82d091f0d72a0'  // 需要从 market 列表里面拿，不能写死哦~
 export const TYPE = {
-  P: '0x15d9193e89913862b4f23b7d4ee8b3da9208971a::pool::Tag',
-  T: '0x86e277713de9707e17b445e909a2ea3e5fcaff55::scale::SCALE'
+  P: '0xef5f2f606575defd9859ce4ba00850c5c9d74270::pool::Tag',
+  T: '0x5307dd797ba69595e2514e6f1c77c66a7b53cd6b::scale::SCALE'
 }
 
 
 // scale oracle 临时报价服务
-export const ORACLE_PACKAGE_OBJECTID = '0xd97b9ed0254f42f34e5637c15d64753c968d9123'
+export const ORACLE_PACKAGE_OBJECTID = '0x6185a80cb5bbc719105a7a9caf35399c1ffbd329'
 export const ORACLE_MODULE = 'oracle'
 
-export const ORACLE_ADMIN_CAP = '0xe41ef51d5f8d50588cdb03736464740d5f756ddb'
-export const ORACLE_ROOT = '0xbaaa462a7018ebb0cd3dfd158349ac45202cc6a0'
+export const ORACLE_ADMIN_CAP = '0x7e8a902f80248815335e551d376d861de256a2e4'
+export const ORACLE_ROOT = '0xee0d834cee29fffc409f0659db38c3925d494876'
