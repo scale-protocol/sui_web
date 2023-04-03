@@ -1,0 +1,145 @@
+.charts-wrapper {
+  box-sizing: border-box;
+  width: 677px;
+  height: 470px;
+  padding: 24px 20px;
+  border-radius: 12px;
+  background-color: #FFF;
+  position: relative;
+}
+
+.token-info {
+  margin-bottom: 16px;
+}
+.token-name-img {
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+}
+.token-name-img img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.numlist {
+  margin-top: 4px;
+  padding-bottom: 24px;
+  position: relative;
+}
+.numlist::after {
+  content: '';
+  width: calc(100% + 40px);
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.05);
+  position: absolute;
+  bottom: 0;
+  left: -20px;
+}
+.numlist .p {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+.numlist li p:nth-child(1) {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+}
+.numlist li p:nth-child(2) {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+.numlist li + li {
+  margin-left: 24px;
+}
+.green{
+  color: #41BA63 !important;
+}
+.red {
+  color: #E76464 !important;
+}
+
+.time-list {
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+}
+.time-list li {
+  padding: 2px 6px;
+}
+.time-list li+li{
+  margin-right: 12px;
+}
+.time-list .active {
+  padding: 2px 6px;
+  background: #000000;
+  border-radius: 35px;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.charts-type-list {
+  padding-left: 24px;
+  position: relative;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+}
+.charts-type-list ::after {
+  content: '';
+  width: 1px;
+  height: 14px;
+  background-color: rgba(0, 0, 0, 0.05);;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 12px;
+  margin: auto;
+}
+.charts-type-list div {
+  margin-left: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+  padding: 2px;
+}
+.charts-type-list img {
+  width: 20px;
+  height: 20px;
+  padding: 0 4px;
+  border-radius: 3px;
+}
+.charts-type-list img + img {
+  margin-left: 6px;
+}
+.charts-type-list .active {
+  background-color: #FFF;
+}
+
+.chart-wrap {
+  position: relative;
+}
+.charts {
+  width: 640px;
+  height: 278px;
+}
+
+.chart-loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* background: rgba(0, 0, 0, 03); */
+  top: 0;
+  left: 0;
+  z-index: 11;
+}

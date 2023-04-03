@@ -1,0 +1,24 @@
+.ant-modal.sty1-modal {
+    border-radius: 16px;
+    overflow: hidden;
+    /* z-index: 0; */
+    padding-bottom: 0;
+}
+
+.ant-modal.sty1-modal .ant-modal-content {
+    background-color: transparent;
+}
+.ant-modal.sty1-modal .ant-modal-content::after {
+    content: '';
+    width: 100%;
+    height: 200px;
+    background: url('./../../img/dialog-bg.png') no-repeat;
+    background-size: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+.ant-modal.sty1-modal .ant-modal-header {
+    background-color: transparent;   
+}

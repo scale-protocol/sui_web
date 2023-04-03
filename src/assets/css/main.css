@@ -1,19 +1,16 @@
 @import './base.css';
 
-@import './utils/font.css';
-@import './utils/iconfont.css';
+/* @import './utils/font.css'; */
+/* @import './utils/iconfont.css'; */
 
-@import './element-plus/index.css';
+/* @import './element-plus/index.css'; */
 @import './common.css';
 
 @import './layout/cell.css';
-@import './layout/group.scss';
+@import './layout/group.css';
 @import './layout/layout.css';
 @import './layout/text.css';
-
-#app {
-  height: 100%;
-}
+@import './layout/antd.css';
 
 /* @media (hover: hover) {
   a:hover {

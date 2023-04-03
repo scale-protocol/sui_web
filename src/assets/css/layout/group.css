@@ -1,0 +1,60 @@
+.mico-global {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url('./../../img/mico-global.png') no-repeat;
+  background-size: 24px;
+}
+
+.mico-arrow-right {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: url('./../../img/mico-arrow-right-black.png') no-repeat;
+  background-size: 12px;
+}
+
+.mico-arrow-right-white {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: url('./../../img/mico-arrow-right-white.png') no-repeat;
+  background-size: 12px;
+}
+
+.mico-success {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background: url('./../../img/mico-success.png') no-repeat;
+  background-size: 12px;
+}
+
+.mico-success-1 {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url('./../../img/icon-success.png') no-repeat;
+  background-size: 20px;
+  margin-right: 4px;
+}
+
+
+.mico-scale {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url('./../../img/icon-scale.png') no-repeat;
+  background-size: 24px;
+  margin-right: 8px;
+}
+
+
+.mico-sui {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: url('./../../img/icon-sui.png') no-repeat;
+  background-size: 24px;
+  margin-right: 8px;
+}

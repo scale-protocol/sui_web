@@ -1,0 +1,73 @@
+.marketList {
+  margin-right: 20px;
+  width: 164px;
+}
+.market {
+  box-sizing: border-box;
+  width: 151px;
+  padding: 16px;
+  border-radius: 10px;
+  background-color: #FFF !important;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.market.active::after {
+  content: '';
+  width: 10px;
+  height: 22px;
+  background: url('./../../img/token-active.png') no-repeat;
+  background-size: 100% 100%;
+  position: absolute;
+  right: -10px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.marketList .img-icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 8px;
+}
+
+.marketList .img-icon-default {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  margin-right: 8px;
+}
+
+.marketList .s {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+}
+.marketList .p {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+
+.marketList .changeP{
+  margin-top: 20px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  width: 71px;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 12px;
+}
+.marketList .changeP.green {
+  color: #41BA63;
+  background: rgba(65, 186, 99, 0.12);
+}
+.marketList .changeP.red {
+  color: #E76464;
+  background: rgba(231, 100, 100, 0.12);
+}

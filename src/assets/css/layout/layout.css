@@ -16,7 +16,7 @@
 
 /* 上下居中的 flex */
 .mui-fl-vert {
-  display: flex;
+  display: flex !important;
   align-items: center;
 }
 
@@ -28,7 +28,7 @@
 
 /* 上下左右居中的 flex */
 .mui-fl-central {
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 }

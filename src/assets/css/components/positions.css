@@ -1,0 +1,22 @@
+.positions {
+  margin-top: 20px;
+}
+
+.sty-positions-tabs.ant-tabs .ant-tabs-tab {
+  font-size: 18px;
+  line-height: 24px;
+  color: #000000;
+}
+.ant-tabs-top >.ant-tabs-nav::before {
+  display: none;
+}
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  /* color: #69D2F5; */
+  color: #000000;
+  font-weight: 600;
+}
+.ant-tabs .ant-tabs-ink-bar {
+  /* background-color:#69D2F5; */
+  background-color:#000;
+  /* display: none; */
+}
