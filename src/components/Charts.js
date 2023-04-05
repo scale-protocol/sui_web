@@ -135,7 +135,7 @@ function Charts() {
             <li className="p">${priceMap? priceMap?.current_price : activeTradePair?.opening_price}</li>
             <li>
               <p>Change( %)</p>
-              <p>{ priceMap?.change_rate }</p>
+              <p>{ priceMap?.change_rate }%</p>
             </li>
             <li>
               <p>Change</p>

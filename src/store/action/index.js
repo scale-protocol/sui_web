@@ -23,6 +23,11 @@ export const setProvider = provider => ({
   provider
 })
 
+export const setMarketListData = marketListData => ({
+  type: 'SET_MARKETLIST_DATA',
+  marketListData
+})
+
 export const setActiveTradePair = activeTradePair => ({
   type: 'SET_ACTIVE_TRADE_PAIR',
   activeTradePair

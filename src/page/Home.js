@@ -22,7 +22,7 @@ function Home() {
   const userInfo = useSelector(state => state.userInfo)
   const positionsModule = useSelector(state => state.positionsModule)
   const activePositions = positionsModule.activePositions;
-  const activeTradePair = useSelector(state => state.activeTradePair);
+  // const activeTradePair = useSelector(state => state.activeTradePair);
 
   const [wsUrl, setWsUrl] = useState('wss://dev-api.scale.exchange/ws?account=');
   const wsRef = useRef(null);
@@ -64,12 +64,12 @@ function Home() {
             dispatch(setActivePositions(_activePositions))
           }
 
-          const _activeTradePair = JSON.parse(JSON.stringify(activeTradePair))
-          if (_activeTradePair) {
-            _activeTradePair.current_price = keepDecimal2((new BigNumber(data.current_price).times(formatTenDecimalNum(-6))).toString(10))
-            _activeTradePair.change_rate = keepDecimal2((new BigNumber(data.change_rate).times(formatTenDecimalNum(-2))).toString(10))
-            dispatch(setActiveTradePair(_activeTradePair))
-          }
+          // const _activeTradePair = JSON.parse(JSON.stringify(activeTradePair))
+          // if (_activeTradePair) {
+          //   _activeTradePair.current_price = keepDecimal2((new BigNumber(data.current_price).times(formatTenDecimalNum(-6))).toString(10))
+          //   _activeTradePair.change_rate = keepDecimal2((new BigNumber(data.change_rate).times(formatTenDecimalNum(-2))).toString(10))
+          //   dispatch(setActiveTradePair(_activeTradePair))
+          // }
 
 
           // 账号更新

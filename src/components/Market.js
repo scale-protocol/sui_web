@@ -8,14 +8,18 @@ import API from './../api/api'
 import './../assets/css/components/market.css'
 
 function Market() {
+  const priceMap = useSelector(state => state.wsModule.wsPrice)
   const [marketsData, setMarketsData] = useState([]);
   const dispatch = useDispatch();
   const activeTradePair = useSelector(state => state.activeTradePair);
 
+  const currentPrice = priceMap?.current_price || ''
+  const changeRate = priceMap?.change_rate || ''
+
   useEffect(() => {
     API.getMarkets().then(result => {
       console.log('result', result)
-      const market = result.data.slice(0, 1)
+      const market = result.data
       market.forEach(v => {
         v.opening_price = keepDecimal2((new BigNumber(v.opening_price).times(formatTenDecimalNum(-6))).toString(10))
       })
@@ -23,6 +27,12 @@ function Market() {
       setMarketsData(market);
     });
   }, [dispatch]);
+  
+  // const _marketsData = JSON.parse(JSON.stringify(marketsData))
+  // _marketsData.forEach(v => {
+  //   v.opening_price = keepDecimal2((new BigNumber(priceMap?.current_price).times(formatTenDecimalNum(-6))).toString(10))
+  //   v.change_rate = keepDecimal2((new BigNumber(priceMap?.change_rate).times(formatTenDecimalNum(-6))).toString(10))
+  // })
 
   const switchTradePair = (item) => {
     dispatch(setActiveTradePair(item));
@@ -39,11 +49,11 @@ function Market() {
                 {/* <p className='img-icon-default mui-shr-0'></p> */}
                 <div className='mui-fl-1'>
                   <p className="s">{ item.symbol_short }</p>
-                  <p className="p">${ activeTradePair ? activeTradePair.current_price : item.opening_price }</p>
+                  <p className="p">${ currentPrice ? currentPrice : item.opening_price }</p>
                 </div>
               </div>
               
-              <p className='changeP red'>{ activeTradePair ? activeTradePair.change_rate : '--' }</p>
+              <p className='changeP red'>{ changeRate ? changeRate + '%' : '--' }</p>
             </li>
           })
         }
