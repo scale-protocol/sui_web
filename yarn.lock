@@ -1638,9 +1638,25 @@
   dependencies:
     bs58 "^5.0.0"
 
-"@mysten/sui.js@0.30.0", "@mysten/sui.js@^0.30.0":
+"@mysten/sui.js@0.30.0":
   version "0.30.0"
   resolved "https://registry.npmmirror.com/@mysten/sui.js/-/sui.js-0.30.0.tgz#4f952418f97b172444412f771a5dab842f45e0e8"
+  integrity sha512-7Mb5fGeg/NfoKvZvCQLL+XsuynFZKx328UykPpqcgY7buAbJiTl8dNNncZGH6nC/+fZRf2J9X0EffiKTES78ig==
+  dependencies:
+    "@mysten/bcs" "0.7.0"
+    "@noble/hashes" "^1.2.0"
+    "@noble/secp256k1" "^1.7.1"
+    "@scure/bip32" "^1.1.5"
+    "@scure/bip39" "^1.1.1"
+    "@suchipi/femver" "^1.0.0"
+    jayson "^4.0.0"
+    rpc-websockets "^7.5.1"
+    superstruct "^1.0.3"
+    tweetnacl "^1.0.3"
+
+"@mysten/sui.js@^0.30.0":
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.30.0.tgz#4f952418f97b172444412f771a5dab842f45e0e8"
   integrity sha512-7Mb5fGeg/NfoKvZvCQLL+XsuynFZKx328UykPpqcgY7buAbJiTl8dNNncZGH6nC/+fZRf2J9X0EffiKTES78ig==
   dependencies:
     "@mysten/bcs" "0.7.0"

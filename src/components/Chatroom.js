@@ -1,10 +1,14 @@
 import Websocket from 'react-websocket';
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { setPriceMap } from './../store/action'
 import { useDispatch } from 'react-redux';
 
 
 function Chatroom () {
+  const accountModule = useSelector(state => state.accountModule)
+  const account = accountModule.account;
+  const [wsUrl, setWsUrl] = useState('wss://dev-api.scale.exchange/ws?account')
   
   const dispatch = useDispatch();
     const [subscribed, setSubscribed] = useState(false)
@@ -45,11 +49,15 @@ function Chatroom () {
   const handleError = (error) => {
     console.error('WebSocket error:', error);
   }
+  useEffect(() => {
+    setWsUrl(`wss://dev-api.scale.exchange/ws?account=${account}`)
+    console.log('wsUrl', wsUrl)
+  }, [account, wsUrl])
 
     return (
       <div>
         <Websocket
-          url="wss://dev-api.scale.exchange/ws?account"
+          url={wsUrl}
           onOpen={handleOpen}
           onClose={handleClose}
           onMessage={handleMessage}

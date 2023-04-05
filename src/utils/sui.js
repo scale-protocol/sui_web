@@ -17,7 +17,8 @@ export const airdrop = async (wallet, objectIds) => {
       transactionBlock.pure(CONIN_RESERVE),
       vec,
       transactionBlock.pure(amount),
-    ]
+    ],
+    gasBudget: 100000
   })
   const response = await wallet.signAndExecuteTransactionBlock({
     transactionBlock,
@@ -38,6 +39,7 @@ export const createAccount = async (wallet, objectId) => {
       transactionBlock.pure(objectId)
     ],
     typeArguments: [TYPE.T],
+    gasBudget: 100000
   })
   
   const response = await wallet.signAndExecuteTransactionBlock({
@@ -71,7 +73,7 @@ export const deposit  = async (wallet, account, amount, objectIds) => {
       transactionBlock.pure(amount),
     ],
     typeArguments: [TYPE.T],
-    gasBudget: 50000,
+    gasBudget: 100000
   })
   const response = await wallet.signAndExecuteTransactionBlock({
     transactionBlock,

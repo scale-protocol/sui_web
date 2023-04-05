@@ -84,6 +84,11 @@ function AirdropContent() {
       }
     } catch (e) {
       console.log(e)
+      
+      messageApi.open({
+        type: 'warning',
+        content: 'Airdrop fail, Please try again later!'
+      })
     }
     setBtnLoading(false)
   }

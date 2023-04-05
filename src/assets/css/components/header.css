@@ -181,3 +181,10 @@ i {
   color: #000000;
   margin-left: 12px;
 }
+
+.header-modal-balance {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(0, 0, 0, 0.45);
+}

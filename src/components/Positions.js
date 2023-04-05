@@ -5,8 +5,9 @@ import { ethos } from "ethos-connect";
 
 import { closePosition } from './../utils/sui'
 import './../assets/css/components/positions.css'
-import API from "../api/api";
-import { setActivePositions, setHistoryPositions } from './../store/action'
+// import API from "../api/api";
+
+import { getPositionsListFun } from './../utils/positions'
 
 
 function Positions() {
@@ -32,52 +33,61 @@ function Positions() {
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.order - b.order,
       key: 'order',
-      dataIndex: 'formatID'
+      dataIndex: 'formatID',
+      width: 152
     },
     {
       title: 'Type',
       dataIndex: 'direction',
       key: 'type',
+      width: 108
     },
     {
       title: 'Size',
-      dataIndex: 'size',
+      dataIndex: 'lot',
       key: 'size',
+      width: 108
     },
     {
       title: 'Leverage',
-      dataIndex: 'leverage',
+      dataIndex: 'leverageFormat',
       key: 'leverage',
+      width: 108
     },
     {
       title: 'Open',
       dataIndex: 'open_price',
       key: 'open',
+      width: 152
     },
-    // {
-    //   title: 'Latest',
-    //   dataIndex: 'latest',
-    //   key: 'latest',
-    // },
+    {
+      title: 'Latest',
+      dataIndex: 'latest',
+      key: 'latest',
+      width: 152
+    },
     {
       title: 'Profit',
       dataIndex: 'profit',
       key: 'profit',
+      width: 152
     },
     {
       title: 'Margin',
       dataIndex: 'margin',
       key: 'margin',
+      width: 110
     },
     {
       title: 'Action',
       key: 'action',
+      width: 152,
       render: (_, record) => (
         <Space size="middle">
           <a>Close {record.name}</a>
         </Space>
       ),
-    },
+    }
   ];
 
   const historyColumns = [
@@ -86,27 +96,32 @@ function Positions() {
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.order - b.order,
       key: 'order',
-      dataIndex: 'formatID'
+      dataIndex: 'formatID',
+      width: 200
     },
     {
       title: 'Type',
       dataIndex: 'direction',
       key: 'type',
+      width: 200
     },
     {
       title: 'Size',
       dataIndex: 'size',
       key: 'size',
+      width: 200
     },
     {
       title: 'Leverage',
       dataIndex: 'leverage',
       key: 'leverage',
+      width: 200
     },
     {
       title: 'Close Price',
       dataIndex: 'close_price',
       key: 'close',
+      width: 200
     },
     // {
     //   title: 'Latest',
@@ -117,18 +132,22 @@ function Positions() {
       title: 'Profit',
       dataIndex: 'profit',
       key: 'profit',
+      width: 200
     },
     {
       title: 'Status',
-      // dataIndex: 'margin',
       key: 'margin',
+      width: 200,
+      render: (_, record) => (
+        <p>Closed</p>
+      ),
     },
     {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <a>Close {record.name}</a>
+          <a>View {record.name}</a>
         </Space>
       ),
     },
@@ -140,14 +159,18 @@ function Positions() {
       label: `Position`,
       children: <Table columns={activeColumns} dataSource={activePositions} onRow={(record) => {
         return {
-          onClick: () => handleClose(record)
+          onClick: () => handleActiveClose(record)
         }
       }} />,
     },
     {
       key: 'history',
       label: `History`,
-      children: <Table columns={historyColumns} dataSource={historyPositions} />,
+      children: <Table columns={historyColumns} dataSource={historyPositions} onRow={(record) => {
+        return {
+          onClick: () => handleHistoryClose(record)
+        }
+      }} />,
     }
   ]
 
@@ -158,17 +181,10 @@ function Positions() {
 
   const getPositionsList = useCallback(() => {
     if (!account) return
-    API.getAccountPositions(tabActive, account).then(result => {
-      if (tabActive === 'active') {
-        dispatch(setActivePositions(result.data))
-      }
-      if (tabActive === 'history') {
-        dispatch(setHistoryPositions(result.data))
-      }
-    });
+    getPositionsListFun(tabActive, account, dispatch)
   }, [account, dispatch, tabActive])
 
-  const handleClose = useCallback(async (record) => {
+  const handleActiveClose = useCallback(async (record) => {
     try {
       const rp = await closePosition(wallet, account, record.id)
       if (rp.confirmedLocalExecution) {
@@ -176,6 +192,10 @@ function Positions() {
           type: 'success',
           content: 'Close Position successful.'
         })
+        setTimeout(() => {
+          getPositionsListFun('active', account, dispatch)
+          getPositionsListFun('history', account, dispatch)
+        }, 3000)
       } else {
         messageApi.open({
           type: 'warning',
@@ -188,7 +208,14 @@ function Positions() {
         content: e.message
       })
     }
-  }, [account, messageApi, wallet])
+  }, [account, dispatch, messageApi, wallet])
+
+  const handleHistoryClose = useCallback(() => {
+    messageApi.open({
+      type: 'warning',
+      content: 'Comimg soon!'
+    })
+  }, [messageApi])
 
   useEffect(() => {
     getPositionsList()
@@ -197,7 +224,7 @@ function Positions() {
   return (
     <>
     {contextHolder}
-    <div className='positions'>
+    <div className='positions mui-fl-btw'>
       <Tabs className='sty-positions-tabs' defaultActiveKey="active" items={tabsItems} onChange={onTabsChange} />
     </div>
     </>

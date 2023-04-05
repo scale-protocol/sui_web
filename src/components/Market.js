@@ -14,7 +14,8 @@ function Market() {
 
   useEffect(() => {
     API.getMarkets().then(result => {
-      const market = result.data.slice(0,1)
+      console.log('result', result)
+      const market = result.data.slice(0, 1)
       market.forEach(v => {
         v.opening_price = keepDecimal2((new BigNumber(v.opening_price).times(formatTenDecimalNum(-6))).toString(10))
       })
@@ -38,11 +39,11 @@ function Market() {
                 {/* <p className='img-icon-default mui-shr-0'></p> */}
                 <div className='mui-fl-1'>
                   <p className="s">{ item.symbol_short }</p>
-                  <p className="p">${ item.opening_price }</p>
+                  <p className="p">${ activeTradePair ? activeTradePair.current_price : item.opening_price }</p>
                 </div>
               </div>
               
-              <p className='changeP red'>-10%</p>
+              <p className='changeP red'>{ activeTradePair ? activeTradePair.change_rate : '--' }</p>
             </li>
           })
         }

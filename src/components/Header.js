@@ -3,10 +3,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import BigNumber from 'bignumber.js'
 import { Modal, Input, message } from 'antd';
+import { JsonRpcProvider } from '@mysten/sui.js'
 
 import API from "../api/api";
 import { setAccount, setAddress, setWallet, setBalanceList, setProvider, setUserInfo } from './../store/action'
-import { formatAddress, getTokenObjectIds } from './../utils/filter'
+import { formatAddress, getTokenObjectIds, formatTenDecimalNum,  keepDecimal2 } from './../utils/filter'
 import { PACKAGE_OBJECTID } from './../utils/token'
 import { deposit, withdraw, createAccount } from './../utils/sui'
 import './../assets/css/components/header.css'
@@ -33,11 +34,9 @@ function Header() {
 
 
   const createAccountFun = useCallback(async () => {
-    console.log('storeBalanceList', storeBalanceList)
     if (storeBalanceList.length === 0) return
     const scaleObjectIds = getTokenObjectIds(storeBalanceList || '[]', 'SCALE')
     if (scaleObjectIds.length === 0) {
-      // console.log('Your scale token balance is 0, Please airdrop!')
       messageApi.open({
         type: 'warning',
         content: 'you need Sui Token to creat your margin account'
@@ -46,7 +45,7 @@ function Header() {
     }
 
     const rp = await createAccount(wallet, scaleObjectIds[0])
-    if (rp.effects.status.status === 'success') {
+    if (rp.confirmedLocalExecution === 'success') {
       messageApi.open({
         type: 'success',
         content: 'Create Account Successful!'
@@ -63,6 +62,7 @@ function Header() {
     if (wallet && status === 'connected') {
       dispatch(setAddress(wallet?.address || ''))  // 存 address
       dispatch(setWallet(JSON.parse(JSON.stringify(wallet) || null)))  // 存 wallet
+
       dispatch(setProvider(provider.connection.fullnode || ''))
 
       const { objects } = wallet?.contents || { objects: [] }
@@ -71,7 +71,6 @@ function Header() {
           dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
         }
       })
-      console.log('account, ', account)
       
       if (!account) {
         createAccountFun()
@@ -85,8 +84,9 @@ function Header() {
         const symbol = v.substring(v.lastIndexOf(':') + 1)
         let tokenInfo
         try {
-          tokenInfo = await providerValue.getCoinMetadata(v)
+          tokenInfo = await (new JsonRpcProvider(providerValue)).getCoinMetadata(v)
         } catch (e) {
+          console.log('error', e)
           tokenInfo = { decimals: 0, symbol }
         }
         if (symbol === 'SUI') {
@@ -100,7 +100,7 @@ function Header() {
           balanceList.push({
             symbol,
             balance: obj.balance.toString(10),
-            formateBalance: new BN(obj.balance.toString(10)).dividedBy(BIG_TEN.pow(tokenInfo.decimals)).toString(10),
+            formateBalance: new BN(obj.balance.toString(10)).dividedBy(BIG_TEN.pow(symbol === 'SCALE' ? 6 : tokenInfo.decimals)).toString(10),
             coins: obj.coins.sort((a, b) => { return b.balance - a.balance })
           })
         }
@@ -108,7 +108,7 @@ function Header() {
 
         balanceList.forEach(v => {
           if (v.symbol === 'SCALE') {
-            setScaleBalance(v.formateBalance)
+            setScaleBalance(keepDecimal2(v.formateBalance))
           }
         })
       })
@@ -117,7 +117,7 @@ function Header() {
     
     if (account) {
       API.getAccountInfo(account).then(result => {
-        console.log('result', result)
+        result.data.margin_total = keepDecimal2((new BigNumber(result.data.margin_total).times(formatTenDecimalNum(-6))).toString(10))
         dispatch(setUserInfo(result.data));
       });
     }
@@ -134,29 +134,43 @@ function Header() {
     const formatAmount = (new BigNumber(inputValue).times(BIG_TEN.pow(6))).toString(10)
     const scaleObjectIds = getTokenObjectIds(storeBalanceList || '[]', 'SCALE').slice(0, 1)
     if (modalActive === 'deposit') {
-      const rp = await deposit(wallet, account, formatAmount, scaleObjectIds)
-      if (rp.confirmedLocalExecution) {
+      try {
+        const rp = await deposit(wallet, account, formatAmount, scaleObjectIds)
+        if (rp.confirmedLocalExecution) {
+          messageApi.open({
+            type: 'success',
+            content: 'Deposit Successful!'
+          })
+        } else {
+          messageApi.open({
+            type: 'warning',
+            content: 'Deposit fail, Please try again later.'
+          })
+        }
+      } catch (e) {
         messageApi.open({
-          type: 'success',
-          content: 'Deposit Successful!'
-        })
-      } else {
-        messageApi.open({
-          type: 'warning',
-          content: 'Deposit fail, Please try again later.'
+          type: 'error',
+          content: e.message
         })
       }
     } else if (modalActive === 'withdraw') {
-      const rp = await withdraw(wallet, account, formatAmount)
-      if (rp.effects.status.status === 'success') {
+      try {
+        const rp = await withdraw(wallet, account, formatAmount)
+        if (rp.confirmedLocalExecution === 'success') {
+          messageApi.open({
+            type: 'success',
+            content: 'Withdraw Successful!'
+          })
+        } else {
+          messageApi.open({
+            type: 'warning',
+            content: 'Withdraw fail, Please try again later'
+          })
+        }
+      } catch (e) {
         messageApi.open({
-          type: 'success',
-          content: 'Withdraw Successful!'
-        })
-      } else {
-        messageApi.open({
-          type: 'warning',
-          content: 'Withdraw fail, Please try again later'
+          type: 'error',
+          content: e.message
         })
       }
     }
@@ -217,7 +231,7 @@ function Header() {
                 </li>
                 <li>
                   <p>Margin Level</p>
-                  <p>$ --</p>
+                  <p>{userInfo && userInfo?.margin_percentage ? userInfo?.margin_percentage + '%' : '--'}</p>
                 </li>
                 <li className="condition mui-fl-vert">
                   <i className="mico-success"></i>
@@ -236,7 +250,7 @@ function Header() {
         <div className="mui-fl-vert">
           <div className="global mui-fl-vert">
             <i className="mico-global"></i>
-            <p className="mui-fl-vert taplight2" onClick={createAccountFun}>
+            <p className="mui-fl-vert taplight2">
               <span>US</span>
               <i className="mico-arrow-right" />
             </p>
@@ -261,12 +275,15 @@ function Header() {
         </div>
       </div>
 
-      <Modal className="sty1-modal header-modal" width={386} okText='Confirm' title={modalActive === 'deposit' ? 'Deposit Margin' : 'Withdraw Margin'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal className="sty1-modal header-modal" centered width={386} okText='Confirm' title={modalActive === 'deposit' ? 'Deposit Margin' : 'Withdraw Margin'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <p className="p1">
           {modalActive === 'deposit' ? 'From Wallet: ' : 'To Wallet: '}
           <span>{formatAddress(address)}</span>
         </p>
         <Input value={inputValue} onInput={handleInput} />
+        <div className="header-modal-balance">
+          {modalActive === 'deposit' ? `Your wallet: $${scaleBalance}` : `Your balance: $${userInfo?.balance}`}
+        </div>
       </Modal>
     </div>
     </>

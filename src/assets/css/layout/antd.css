@@ -5,9 +5,6 @@
     padding-bottom: 0;
 }
 
-.ant-modal.sty1-modal .ant-modal-content {
-    background-color: transparent;
-}
 .ant-modal.sty1-modal .ant-modal-content::after {
     content: '';
     width: 100%;
@@ -17,8 +14,10 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
+    z-index: 0;
 }
-.ant-modal.sty1-modal .ant-modal-header {
+.ant-modal.sty1-modal .ant-modal-header, .ant-modal.sty1-modal .ant-modal-body, .ant-modal.sty1-modal .ant-modal-footer {
     background-color: transparent;   
+    position: relative;
+    z-index: 1;
 }

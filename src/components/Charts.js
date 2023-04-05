@@ -23,7 +23,7 @@ function Charts() {
   const [chartLoading, setChartLoading] = useState(false)
   const activeTradePair = useSelector(state => state.activeTradePair);
 
-  const priceMap = useSelector(state => state.ws)
+  const priceMap = useSelector(state => state.wsModule.wsPrice)
 
   const [chartsType] = useState([
     { txt: 'areaLine', icon: areaLineImg },

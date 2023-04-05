@@ -1,13 +1,115 @@
+import { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import BigNumber from 'bignumber.js'
+
+import { setPriceMap, setUserInfo, setActivePositions, setActiveTradePair } from './../store/action'
+import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
+import { getPositionsListFun } from './../utils/positions'
+
 import Header from '../components/Header';
 import Market from '../components/Market';
 import Charts from '../components/Charts';
 import TradeForm from '../components/TradeForm';
 import Positions from '../components/Positions';
-import Chatroom from '../components/Chatroom';
+// import Chatroom from '../components/Chatroom';
 // import Counter from '../components/Counter';
 import './../assets/css/views/home.css'
 
 function Home() {
+  const dispatch = useDispatch();
+  const accountModule = useSelector(state => state.accountModule)
+  const account = accountModule.account;
+  const userInfo = useSelector(state => state.userInfo)
+  const positionsModule = useSelector(state => state.positionsModule)
+  const activePositions = positionsModule.activePositions;
+  const activeTradePair = useSelector(state => state.activeTradePair);
+
+  const [wsUrl, setWsUrl] = useState('wss://dev-api.scale.exchange/ws?account=');
+  const wsRef = useRef(null);
+  const [connected, setConnected] = useState(false)
+
+  useEffect(() => {
+    if (wsUrl && !wsRef.current && !connected) {
+      const newWs = (new WebSocket(wsUrl))
+      wsRef.current = newWs;
+
+      newWs.onopen = () => {
+        setConnected(false)
+        newWs.send(
+          JSON.stringify({
+              "symbol": "Crypto.BTC/USD",
+              "sub_type": "subscribe"
+          })
+        )
+      }
+
+      newWs.onclose = () => {
+        setConnected(false)
+      }
+
+      newWs.onerror = () => console.log('WebSocket connection error');
+
+      newWs.onmessage = (message) => {
+        const { event, data } = JSON.parse(message.data)
+
+        // 价格更新
+        if (event === 'price_update') {
+          dispatch(setPriceMap(data))
+
+          const _activePositions = JSON.parse(JSON.stringify(activePositions))
+          if(_activePositions) {
+            _activePositions.forEach(v => {
+              v.latest = keepDecimal2((new BigNumber(data.current_price).times(formatTenDecimalNum(-6))).toString(10))
+            })
+            dispatch(setActivePositions(_activePositions))
+          }
+
+          const _activeTradePair = JSON.parse(JSON.stringify(activeTradePair))
+          if (_activeTradePair) {
+            _activeTradePair.current_price = keepDecimal2((new BigNumber(data.current_price).times(formatTenDecimalNum(-6))).toString(10))
+            _activeTradePair.change_rate = keepDecimal2((new BigNumber(data.change_rate).times(formatTenDecimalNum(-2))).toString(10))
+            dispatch(setActiveTradePair(_activeTradePair))
+          }
+
+
+          // 账号更新
+        } else if (event === 'account_update') {
+          dispatch(setUserInfo(Object.assign({}, userInfo, data)));
+
+          // 仓位更新
+        } else if (event === 'position_update') {
+          if (activePositions) {
+            const _activePositions = JSON.parse(JSON.stringify(activePositions))
+            if (_activePositions) {
+              _activePositions.forEach(v => {
+                if (v.id === data.id) {
+                  v.profit = keepDecimal2((new BigNumber(data.profit).times(formatTenDecimalNum(-6))).toString(10))
+                }
+              })
+              dispatch(setActivePositions(_activePositions))
+            }
+          }
+
+          // 开仓
+        } else if (event === 'position_open') {
+          getPositionsListFun('active', account, dispatch)
+          // 关仓
+        } else if (event === 'position_close') {
+          getPositionsListFun('active', account, dispatch)
+          getPositionsListFun('history', account, dispatch)
+        }
+      }
+    }
+    
+    if (account && userInfo && activePositions && wsRef.current) {
+      if (wsUrl !== `wss://dev-api.scale.exchange/ws?account=${account}`) {
+          wsRef.current.close()
+          wsRef.current = null;
+          setWsUrl(`wss://dev-api.scale.exchange/ws?account=${account}`)
+      }
+    }
+  }, [account, activePositions, connected, dispatch, userInfo, wsUrl]);
+
   return (
     <div>
       <Header />
@@ -22,7 +124,7 @@ function Home() {
         </div>
       </div>
       
-      <Chatroom></Chatroom>
+      {/* <Chatroom></Chatroom> */}
       {/* <div className='section'>
         <Counter />
       </div> */}
