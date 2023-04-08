@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import BigNumber from 'bignumber.js'
 
-import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
+import { formatTenDecimalNum, keepDecimal2, formatNum } from './../utils/filter'
 import { setActiveTradePair } from '../store/action';
 import API from './../api/api'
 import './../assets/css/components/market.css'
@@ -47,7 +47,7 @@ function Market() {
                 </div>
               </div>
               
-              <p className='changeP red'>{ changeRate ? changeRate + '%' : '--' }</p>
+              <p className={changeRate > 0 ? 'changeP green' : 'changeP red'}>{ changeRate ? formatNum(changeRate) + '%' : '--' }</p>
             </li>
           })
         }

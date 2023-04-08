@@ -1,4 +1,4 @@
-import { Space, Table, Tabs, message } from 'antd';
+import { Button, Space, Table, Tabs, message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ethos } from "ethos-connect";
@@ -11,6 +11,7 @@ import './../assets/css/components/positions.css'
 // import API from "../api/api";
 
 import { getPositionsListFun } from './../utils/positions'
+import { formatNum } from '../utils/filter';
 
 
 function Positions() {
@@ -41,9 +42,11 @@ function Positions() {
     },
     {
       title: 'Type',
-      dataIndex: 'direction',
       key: 'type',
-      width: 108
+      width: 108,
+      render: (_, record) => (
+          <p className={record.direction.toLocaleUpperCase() === 'BUY' ? 'green' : 'red'}>{ (record.direction).toLocaleUpperCase() }</p>
+      ),
     },
     {
       title: 'Size',
@@ -53,9 +56,11 @@ function Positions() {
     },
     {
       title: 'Leverage',
-      dataIndex: 'leverageFormat',
       key: 'leverage',
-      width: 108
+      width: 108,
+      render: (_, record) => (
+          <p className='position-leverage'>{ record.leverageFormat }</p>
+      )
     },
     {
       title: 'Open',
@@ -88,11 +93,12 @@ function Positions() {
       key: 'action',
       width: 152,
       render: (_, record) => (
-        <Space size="middle">
-          <p onClick={() => handleActiveClose(record)}>
-            <a>Close {record.name}</a>
+        <div className='mui-fl-vert'>
+          <Button className='posotion-list-close-btn' onClick={() => handleActiveClose(record)} type="primary" shape="round">Close</Button>
+          <p className='position-list-icon mui-fl-central taplight' onClick={() => handleHistoryView(record)}>
+            <i className='mico-share' />
           </p>
-        </Space>
+        </div>
       ),
     }
   ];
@@ -108,9 +114,11 @@ function Positions() {
     },
     {
       title: 'Type',
-      dataIndex: 'direction',
       key: 'type',
-      width: 200
+      width: 200,
+      render: (_, record) => (
+          <p className={record.direction.toLocaleUpperCase() === 'BUY' ? 'green' : 'red'}>{ (record.direction).toLocaleUpperCase() }</p>
+      ),
     },
     {
       title: 'Size',
@@ -120,9 +128,11 @@ function Positions() {
     },
     {
       title: 'Leverage',
-      dataIndex: 'leverage',
       key: 'leverage',
-      width: 200
+      width: 200,
+      render: (_, record) => (
+          <p className='position-leverage'>{ record.leverageFormat }</p>
+      )
     },
     {
       title: 'Close Price',
@@ -137,9 +147,11 @@ function Positions() {
     // },
     {
       title: 'Profit',
-      dataIndex: 'profit',
       key: 'profit',
-      width: 200
+      width: 200,
+      render: (_, record) => (
+          <p className={record.profit > 0 ? 'green' : 'red'}>{ formatNum(record.profit, '$') }</p>
+      )
     },
     {
       title: 'Status',
@@ -154,8 +166,8 @@ function Positions() {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <p onClick={() => handleHistoryView(record)}>
-            <a>View {record.name}</a>
+          <p className='position-list-icon mui-fl-central taplight' onClick={() => handleHistoryView(record)}>
+            <i className='mico-share' />
           </p>
         </Space>
       ),
@@ -212,10 +224,6 @@ function Positions() {
   }, [account, dispatch, messageApi, wallet])
 
   const handleHistoryView = useCallback((record) => {
-    // messageApi.open({
-    //   type: 'warning',
-    //   content: 'Comimg soon!'
-    // })
     window.open(`https://explorer.sui.io/object/${record.id}?network=devnet`)
   }, [])
 

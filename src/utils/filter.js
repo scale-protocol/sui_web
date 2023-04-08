@@ -32,3 +32,10 @@ export const keepDecimal2 = (num) =>{
   const fixedNum = parseFloat(num).toFixed(2);
   return fixedNum
 }
+
+/**
+ * 返回带有加减号的数字
+ */
+export const formatNum = (num, type='') =>{
+  return num > 0 ? `+${type+num}` : `-${type+Math.abs(num)}`
+}

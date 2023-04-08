@@ -7,7 +7,7 @@ import { JsonRpcProvider } from '@mysten/sui.js'
 
 import API from "../api/api";
 import { setAccount, setAddress, setWallet, setBalanceList, setProvider, setUserInfo } from './../store/action'
-import { formatAddress, getTokenObjectIds, formatTenDecimalNum,  keepDecimal2 } from './../utils/filter'
+import { formatAddress, getTokenObjectIds, formatTenDecimalNum,  keepDecimal2, formatNum } from './../utils/filter'
 import { PACKAGE_OBJECTID } from './../utils/token'
 import { deposit, withdraw, createAccount } from './../utils/sui'
 import './../assets/css/components/header.css'
@@ -237,7 +237,7 @@ function Header() {
                 </li>
                 <li>
                   <p>Margin Level</p>
-                  <p>{userInfo && userInfo?.margin_percentage ? userInfo?.margin_percentage + '%' : '--'}</p>
+                  <p>{userInfo && userInfo?.margin_percentage ? formatNum(userInfo?.margin_percentage) + '%' : '--'}</p>
                 </li>
                 <li className="condition mui-fl-vert">
                   <i className="mico-success"></i>

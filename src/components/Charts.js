@@ -9,6 +9,8 @@ import API from './../api/api'
 import './../assets/css/components/charts.css'
 import candleImg from './../assets/img/candle.png'
 import areaLineImg from './../assets/img/areaLine.png'
+import { formatNum } from './../utils/filter'
+
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 let areaLineChat = null
@@ -135,11 +137,11 @@ function Charts() {
             <li className="p">${priceMap? priceMap?.current_price_format : activeTradePair?.opening_price}</li>
             <li>
               <p>24H Change( %)</p>
-              <p>{ priceMap?.change_rate }%</p>
+              <p className={priceMap ? (priceMap?.change_rate > 0 ? 'green' : 'red') : ''}>{ priceMap?.change_rate ? formatNum(priceMap?.change_rate) + '%' : '--' }</p>
             </li>
             <li>
               <p>24H Change</p>
-              <p>{ priceMap?.change }</p>
+              <p className={priceMap ? (priceMap?.change > 0 ? 'green' : 'red') : ''}>{ priceMap?.change ? formatNum(priceMap?.change, '$') : '--'}</p>
             </li>
             <li>
               <p>24H High</p>

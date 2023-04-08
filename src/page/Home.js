@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import BigNumber from 'bignumber.js'
+import { Modal, Button } from 'antd';
 
 import { setPriceMap, setUserInfo, setWsPositionUpdateData } from './../store/action'
 // import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
@@ -14,6 +15,8 @@ import Positions from '../components/Positions';
 // import Chatroom from '../components/Chatroom';
 // import Counter from '../components/Counter';
 import './../assets/css/views/home.css'
+import welcome from './../assets/img/welcome.png'
+
 
 function Home() {
   const dispatch = useDispatch();
@@ -105,6 +108,14 @@ function Home() {
     }
   }, [account, activePositions, connected, dispatch, userInfo, wsUrl]);
 
+  // const isModalOpen = () => {}
+  const [isModalOpen, setIsModalOpen] = useState(true)
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
   return (
     <div>
       <Header />
@@ -123,6 +134,31 @@ function Home() {
       {/* <div className='section'>
         <Counter />
       </div> */}
+      
+      <Modal className="sty1-modal header-modal" centered width={386} okText='Confirm' footer={[]} open={isModalOpen} onCancel={handleCancel}>
+        <div className='welcome mui-fl-col mui-fl-vert'>
+          <img src={welcome} alt='' />
+          <p className='t1'>Welcome to Scale!</p>
+          <ul>
+            <li className='mui-fl-vert'>
+              <p>1</p>
+              <p>Please connect your wallet.</p>
+            </li>
+            <li className='mui-fl-vert'>
+              <p>2</p>
+              <p>Please click Deposit to complete funding.</p>
+            </li>
+            <li className='mui-fl-vert'>
+              <p>3</p>
+              <p>Now, you can start trading.</p>
+            </li>
+          </ul>
+          
+          <Button className="welcome-got-it-btn" type="primary" size='large' shape="round" onClick={() => handleOk()}>
+            Got it
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

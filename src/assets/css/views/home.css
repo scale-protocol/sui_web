@@ -16,3 +16,69 @@
   left: 0;
   z-index: -1;
 }
+
+.welcome {
+  padding-top: 20px;
+}
+.welcome img {
+  width: 80px;
+  height: 80px;
+}
+.welcome .t1 {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+.welcome ul {
+  margin-top: 12px;
+  position: relative;
+  margin-bottom: 32px !important;
+}
+.welcome ul::after {
+  content: '';
+  width: 1px;
+  height: 44px;
+  background-color: #69D2F5;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  z-index: -1;
+}
+.welcome ul li p:nth-child(1) {
+  width: 20px;
+  height: 20px;
+  background-color: #69D2F5;
+  border-radius: 50%;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  margin-right: 8px;
+}
+.welcome ul li p:nth-child(2) {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+.welcome ul li + li {
+  margin-top: 12px;
+}
+.welcome .welcome-got-it-btn {
+  width: 226px;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.05);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.75);
+}
+.welcome .welcome-got-it-btn.ant-btn-primary:not(:disabled):hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.75);
+}

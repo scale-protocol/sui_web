@@ -139,7 +139,7 @@ function TradeForm() {
           <p className='pair mui-fl-vert'>
             <img src={activeTradePair?.icon} alt='' />
             <span className='s1'>{ activeTradePair?.symbol_short }</span>
-            <span className={`s2 ${tradeType}`}>{ tradeType }</span>
+            <span className={`s2 ${tradeType}`}>{ tradeType.toLocaleUpperCase() }</span>
           </p>
           <ul className='mui-fl-vert'>
             <li className='mui-fl-1'>
@@ -148,7 +148,7 @@ function TradeForm() {
             </li>
             <li className='mui-fl-1'>
               <p>Leverage</p>
-              <p>{ form.getFieldsValue().leverage }</p>
+              <p>{ form.getFieldsValue().leverage }X</p>
             </li>
             <li className='mui-fl-1'>
               <p>Margin</p>
@@ -157,10 +157,10 @@ function TradeForm() {
           </ul>
         </div>
 
-        <div className='sui-exploeer mui-fl-vert taplight2'>
+        {/* <div className='sui-exploeer mui-fl-vert taplight2'>
           <p>Sui Explorer</p>
           <i className='mico-share' />
-        </div>
+        </div> */}
 
         <Button className="trade-openposi-success-done" type="primary" size='large' shape="round" onClick={() => handleOk()}>
             DONE
