@@ -26,8 +26,7 @@ function Market() {
       dispatch(setActiveTradePair(market[0]));
       setMarketsData(market);
     });
-    document.title = `${priceMap?.current_price_format + ' | ' + activeTradePair.symbol_short} | Scale`
-  }, [activeTradePair.symbol_short, dispatch, priceMap?.current_price_format]);
+  }, [dispatch]);
 
   const switchTradePair = (item) => {
     dispatch(setActiveTradePair(item));
