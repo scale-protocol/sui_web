@@ -72,9 +72,9 @@ function Header() {
         }
       })
       
-      if (!account) {
-        createAccountFun()
-      }
+      // if (!account) {
+      //   createAccountFun()
+      // }
       
       // 存储 balanceList
       const balanceList = []
@@ -86,7 +86,7 @@ function Header() {
         try {
           tokenInfo = await (new JsonRpcProvider(providerValue)).getCoinMetadata(v)
         } catch (e) {
-          console.log('error', e)
+          // console.log('error', e)
           tokenInfo = { decimals: 0, symbol }
         }
         if (symbol === 'SUI') {
@@ -121,7 +121,8 @@ function Header() {
         dispatch(setUserInfo(result.data));
       });
     }
-  }, [address, dispatch, provider, providerValue, status, wallet, scaleBalance, storeBalanceList, account, createAccountFun])
+  }, [account, dispatch, provider, providerValue, status, wallet])
+
 
   const handleOk = async () => {
     if (!account) {
@@ -168,6 +169,7 @@ function Header() {
           })
         }
       } catch (e) {
+        console.log('err', e)
         messageApi.open({
           type: 'error',
           content: e.message
@@ -184,9 +186,13 @@ function Header() {
   };
 
   const openModal = useCallback((type) => {
-    setIsModalOpen(() => true)
-    setModalActive(() => type)
-  }, [])
+    if (type === 'deposit' && !account) {
+      createAccountFun()
+    } else {
+      setIsModalOpen(() => true)
+      setModalActive(() => type)
+    }
+  }, [account, createAccountFun])
 
   const handleInput = (e) => {
     let value = e.target.value;
@@ -227,7 +233,7 @@ function Header() {
                 </li>
                 <li>
                   <p>Margin</p>
-                  <p>$ {userInfo? userInfo?.margin_total : '--'}</p>
+                  <p>$ {userInfo? new BigNumber(userInfo?.margin_total).toFormat() : '--'}</p>
                 </li>
                 <li>
                   <p>Margin Level</p>
@@ -248,13 +254,13 @@ function Header() {
         </div>
 
         <div className="mui-fl-vert">
-          <div className="global mui-fl-vert">
+          {/* <div className="global mui-fl-vert">
             <i className="mico-global"></i>
             <p className="mui-fl-vert taplight2">
               <span>US</span>
               <i className="mico-arrow-right" />
             </p>
-          </div>
+          </div> */}
           <div>
             {!wallet ? (
               <SignInButton>

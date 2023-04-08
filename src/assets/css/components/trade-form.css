@@ -54,6 +54,9 @@
   border-radius: 8px 27px 27px 8px;
   margin-left: 12px;
 }
+.trade-form-btn.ant-btn-primary:disabled {
+  color: #FFFFFF;
+}
 .trade-form-rate {
   width: 36px;
   height: 20px;
@@ -124,4 +127,84 @@
 }
 .ant-input-number .ant-input-number-handler-wrap {
   background-color: #FAFAFA;
+}
+
+.trade-openposi-success {
+  position: relative;
+  padding-top: 20px;
+}
+.trade-openposi-success .title {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  margin-top: 12px;
+}
+.trade-openposi-success .trade-info {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
+  width: 100%;
+  padding: 16px 20px;
+  margin-top: 20px;
+}
+.trade-openposi-success .trade-info .pair img{
+  width: 20px;
+  height: 20px;
+}
+.trade-openposi-success .trade-info .pair .s1 {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+  color: #000000;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+.trade-openposi-success .trade-info .pair .s2 {
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.04em;
+}
+.trade-openposi-success .trade-info .pair .s2.buy {
+  background: rgba(65, 186, 99, 0.1);
+  color: #41BA63;
+}
+.trade-openposi-success .trade-info ul {
+  margin-top: 20px;
+}
+.trade-openposi-success .trade-info ul li p:nth-child(1){
+  line-height: 18px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.45);
+}
+.trade-openposi-success .trade-info ul li p:nth-child(2){
+  margin-top: 12px;
+  height: 20px;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+.trade-openposi-success .sui-exploeer {
+  margin-top: 20px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: -0.04em;
+  color: rgba(0, 0, 0, 0.75);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.75);
+  margin-bottom: 16px;
+}
+.trade-openposi-success-done {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.75);
+  box-shadow: none;
+}
+.trade-openposi-success-done.ant-btn-primary:not(:disabled):hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.75);
 }

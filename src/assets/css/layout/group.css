@@ -39,6 +39,14 @@
   margin-right: 4px;
 }
 
+.mico-success-2 {
+  display: inline-block;
+  width: 68px;
+  height: 68px;
+  background: url('./../../img/icon-success01.png') no-repeat;
+  background-size: 68px;
+}
+
 
 .mico-scale {
   display: inline-block;
@@ -57,4 +65,12 @@
   background: url('./../../img/icon-sui.png') no-repeat;
   background-size: 24px;
   margin-right: 8px;
+}
+
+.mico-share {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url('./../../img/icon-share.png') no-repeat;
+  background-size: 16px;
 }

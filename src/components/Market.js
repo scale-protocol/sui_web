@@ -19,20 +19,15 @@ function Market() {
   useEffect(() => {
     API.getMarkets().then(result => {
       console.log('result', result)
-      const market = result.data
+      const market = result.data.slice(0, 1)
       market.forEach(v => {
         v.opening_price = keepDecimal2((new BigNumber(v.opening_price).times(formatTenDecimalNum(-6))).toString(10))
       })
       dispatch(setActiveTradePair(market[0]));
       setMarketsData(market);
     });
-  }, [dispatch]);
-  
-  // const _marketsData = JSON.parse(JSON.stringify(marketsData))
-  // _marketsData.forEach(v => {
-  //   v.opening_price = keepDecimal2((new BigNumber(priceMap?.current_price).times(formatTenDecimalNum(-6))).toString(10))
-  //   v.change_rate = keepDecimal2((new BigNumber(priceMap?.change_rate).times(formatTenDecimalNum(-6))).toString(10))
-  // })
+    document.title = `${priceMap?.current_price_format + ' | ' + activeTradePair.symbol_short} | Scale`
+  }, [activeTradePair.symbol_short, dispatch, priceMap?.current_price_format]);
 
   const switchTradePair = (item) => {
     dispatch(setActiveTradePair(item));

@@ -132,13 +132,13 @@ function Charts() {
             { activeTradePair?.symbol }
           </div>
           <ul className='mui-fl-vert numlist'>
-            <li className="p">${priceMap? priceMap?.current_price : activeTradePair?.opening_price}</li>
+            <li className="p">${priceMap? priceMap?.current_price_format : activeTradePair?.opening_price}</li>
             <li>
-              <p>Change( %)</p>
+              <p>24H Change( %)</p>
               <p>{ priceMap?.change_rate }%</p>
             </li>
             <li>
-              <p>Change</p>
+              <p>24H Change</p>
               <p>{ priceMap?.change }</p>
             </li>
             <li>

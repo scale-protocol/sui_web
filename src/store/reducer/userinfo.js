@@ -6,10 +6,10 @@ const userInfo = (state = null, action) => {
     switch (action.type) {
       case 'SET_USER_INFO': 
         const obj = {
-          balance: keepDecimal2((new BigNumber(action.userinfo.balance).times(formatTenDecimalNum(-6))).toString(10)),
+          balance: new BigNumber(keepDecimal2((new BigNumber(action.userinfo.balance).times(formatTenDecimalNum(-6))).toString(10))).toFormat(),
         }
         if (action.userinfo?.margin_percentage) {
-          obj.margin_percentage = (new BigNumber(action.userinfo.margin_percentage)).times(BIG_TEN.pow(2)).toString(10)
+          obj.margin_percentage = new BigNumber((new BigNumber(action.userinfo.margin_percentage)).times(BIG_TEN.pow(2)).toString(10)).toFormat()
         }
         return Object.assign({},action.userinfo, obj)
   

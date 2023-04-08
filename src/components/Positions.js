@@ -2,8 +2,11 @@ import { Space, Table, Tabs, message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ethos } from "ethos-connect";
+// import BigNumber from 'bignumber.js'
 
 import { closePosition } from './../utils/sui'
+// import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
+
 import './../assets/css/components/positions.css'
 // import API from "../api/api";
 
@@ -17,12 +20,12 @@ function Positions() {
   const accountModule = useSelector(state => state.accountModule)
   const account = accountModule.account;
   const [tabActive, setTabActive] = useState('active')
+  const priceMap = useSelector(state => state.wsModule.wsPrice)
 
   const positionsModule = useSelector(state => state.positionsModule)
   const activePositions = positionsModule.activePositions;
   const historyPositions = positionsModule.historyPositions;
-  // console.log('activePositions', activePositions)
-  // console.log('historyPositions', historyPositions)
+  // const wsPositionUpdateData = positionsModule.wsPositionUpdateData;
 
   const dispatch = useDispatch();
 
@@ -62,9 +65,11 @@ function Positions() {
     },
     {
       title: 'Latest',
-      dataIndex: 'latest',
       key: 'latest',
-      width: 152
+      width: 152,
+      render: (_, record) => (
+          <p>{ priceMap?.current_price_format }</p>
+      ),
     },
     {
       title: 'Profit',
@@ -84,7 +89,9 @@ function Positions() {
       width: 152,
       render: (_, record) => (
         <Space size="middle">
-          <a>Close {record.name}</a>
+          <p onClick={() => handleActiveClose(record)}>
+            <a>Close {record.name}</a>
+          </p>
         </Space>
       ),
     }
@@ -107,7 +114,7 @@ function Positions() {
     },
     {
       title: 'Size',
-      dataIndex: 'size',
+      dataIndex: 'lot',
       key: 'size',
       width: 200
     },
@@ -147,7 +154,9 @@ function Positions() {
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <a>View {record.name}</a>
+          <p onClick={() => handleHistoryView(record)}>
+            <a>View {record.name}</a>
+          </p>
         </Space>
       ),
     },
@@ -157,20 +166,12 @@ function Positions() {
     {
       key: 'active',
       label: `Position`,
-      children: <Table columns={activeColumns} dataSource={activePositions} onRow={(record) => {
-        return {
-          onClick: () => handleActiveClose(record)
-        }
-      }} />,
+      children: <Table columns={activeColumns} dataSource={activePositions} />,
     },
     {
       key: 'history',
       label: `History`,
-      children: <Table columns={historyColumns} dataSource={historyPositions} onRow={(record) => {
-        return {
-          onClick: () => handleHistoryClose(record)
-        }
-      }} />,
+      children: <Table columns={historyColumns} dataSource={historyPositions} />,
     }
   ]
 
@@ -210,15 +211,23 @@ function Positions() {
     }
   }, [account, dispatch, messageApi, wallet])
 
-  const handleHistoryClose = useCallback(() => {
-    messageApi.open({
-      type: 'warning',
-      content: 'Comimg soon!'
-    })
-  }, [messageApi])
+  const handleHistoryView = useCallback((record) => {
+    // messageApi.open({
+    //   type: 'warning',
+    //   content: 'Comimg soon!'
+    // })
+    window.open(`https://explorer.sui.io/object/${record.id}?network=devnet`)
+  }, [])
 
   useEffect(() => {
     getPositionsList()
+    // const _activePositions = JSON.parse(JSON.stringify(activePositions))
+    // _activePositions.forEach(v => {
+    //   if (v.id === wsPositionUpdateData?.id) {
+    //     v.profit = keepDecimal2((new BigNumber(wsPositionUpdateData.profit).times(formatTenDecimalNum(-6))).toString(10))
+    //   }
+    // })
+    // setForActivePositions(_activePositions)
   }, [getPositionsList])
 
   return (

@@ -8,24 +8,25 @@ import { formatTenDecimalNum, keepDecimal2, formatAddress } from './filter'
 export const getPositionsListFun = (tabActive, account, _dispatch) =>{
     API.getAccountPositions(tabActive, account).then(result => {
         if (tabActive === 'active') {
-            result.data.forEach(v => {
+            result.data && result.data.forEach(v => {
             v.margin = keepDecimal2((new BigNumber(v.margin).times(formatTenDecimalNum(-6))).toString(10))
             v.open_price = keepDecimal2((new BigNumber(v.open_price).times(formatTenDecimalNum(-6))).toString(10))
             v.lot = ((new BigNumber(v.lot).times(formatTenDecimalNum(-4))).toString(10))
             v.leverageFormat = v.leverage + 'X'
             v.formatID = formatAddress(v.id)
-            })
-            _dispatch(setActivePositions(result.data))
+            v.latest = null
+        })
+        _dispatch(setActivePositions(result.data))
         }
         if (tabActive === 'history') {
             result.data.forEach(v => {
             v.formatID = formatAddress(v.id)
             v.close_price = keepDecimal2((new BigNumber(v.close_price).times(formatTenDecimalNum(-6))).toString(10))
             v.profit =  keepDecimal2((new BigNumber(v.profit).times(formatTenDecimalNum(-6))).toString(10))
-            v.lot = ((new BigNumber(v.open_price).times(formatTenDecimalNum(-4))).toString(10))
+            v.lot = ((new BigNumber(v.lot).times(formatTenDecimalNum(-4))).toString(10))
             v.leverageFormat = v.leverage + 'X'
-            })
-            _dispatch(setHistoryPositions(result.data))
+        })
+        _dispatch(setHistoryPositions(result.data))
         }
-        });
+    });
 }

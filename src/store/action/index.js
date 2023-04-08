@@ -53,3 +53,8 @@ export const setHistoryPositions = historyPositions => ({
   type: 'SET_HISTORY_POSITIONS',
   historyPositions
 })
+
+export const setWsPositionUpdateData = wsData => ({
+  type: 'SET_WS_POSITION_UPDAT',
+  wsData
+})

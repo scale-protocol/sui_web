@@ -30,6 +30,5 @@ export const formatTenDecimalNum = (decimal) => {
 
 export const keepDecimal2 = (num) =>{
   const fixedNum = parseFloat(num).toFixed(2);
-  const result = fixedNum.toString(); // "123.46"
-  return result
+  return fixedNum
 }

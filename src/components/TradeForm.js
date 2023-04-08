@@ -4,7 +4,7 @@ import { ethos, SignInButton } from "ethos-connect";
 import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
 import { openPosition } from './../utils/sui'
 import { getPositionsListFun } from './../utils/positions'
-import { Button, Form, InputNumber, message } from 'antd';
+import { Button, Form, InputNumber, message, Modal } from 'antd';
 import './../assets/css/components/trade-form.css'
 import { useState } from 'react';
 
@@ -15,12 +15,16 @@ function TradeForm() {
   const [form] = Form.useForm();
   const account = useSelector(state => state.accountModule.account);
   const address = useSelector(state => state.accountModule.address);
-
+  const activeTradePair = useSelector(state => state.activeTradePair);
   const priceMap = useSelector(state => state.wsModule.wsPrice)
 
   const dispatch = useDispatch();
   const [margin, setMargin] = useState('0.00')
   const [spread, setSpread] = useState(0)
+  const [tradeType, setTradeType] = useState('buy')
+
+  const [btnDisabled, setBtnDisabled] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClkTrade = async (type) => {
     if (!account) {
@@ -30,14 +34,16 @@ function TradeForm() {
       })
       return
     }
+    setTradeType(type)
     const values = form.getFieldsValue();
     const formatSize = (new BigNumber(values.size).times(formatTenDecimalNum(4))).toString(10)
     const rp = await openPosition(wallet, account, formatSize, values.leverage.toString(), 1, type === 'sell' ? 2 : 1)
     if (rp.confirmedLocalExecution) {
-      messageApi.open({
-        type: 'success',
-        content: 'Open Position Successful!'
-      })
+      // messageApi.open({
+      //   type: 'success',
+      //   content: 'Open Position Successful!'
+      // })
+      setIsModalOpen(true)
       setTimeout(() => {
         getPositionsListFun('active', account, dispatch)
       }, 3000)
@@ -52,11 +58,20 @@ function TradeForm() {
   const handleIpt = () => {
     const values = form.getFieldsValue();
     if (values.size && values.leverage) {
-      const _margin = keepDecimal2(new BigNumber(values.size).times(new BigNumber(priceMap?.current_price)).dividedBy(values.leverage)).toString(10)
+      const _margin = keepDecimal2(new BigNumber(values.size).times(new BigNumber(priceMap?.current_price)).dividedBy(new BigNumber(values.leverage))).toString(10)
       const _spread = keepDecimal2(new BigNumber(values.size).times(new BigNumber(40)).dividedBy(values.leverage)).toString(10)
       setMargin(_margin)
       setSpread(_spread)
+      setBtnDisabled(false)
+    }  else {
+      setBtnDisabled(true)
+      setMargin('0.00')
+      setSpread(0)
     }
+  }
+
+  const handleOk = () => {
+    setIsModalOpen(false)
   }
 
 
@@ -97,12 +112,12 @@ function TradeForm() {
         </p>
           {address ? 
           <div className='mui-fl-vert trade-form-btns'>
-            <Button className='trade-form-btn red-bg' type="primary" htmlType="button" onClick={() =>handleClkTrade('sell')}>
-              Sell
+            <Button className='trade-form-btn red-bg' disabled={btnDisabled} type="primary" htmlType="button" onClick={() =>handleClkTrade('sell')}>
+              Sell <br></br> { new BigNumber(priceMap?.current_price).minus(new BigNumber(40)).toFormat() }
             </Button>
-            <p className='trade-form-rate'>20</p>
-            <Button className='trade-form-btn green-bg' type="primary" htmlType="button" onClick={() => handleClkTrade('buy')}>
-              Buy
+            <p className='trade-form-rate'>80</p>
+            <Button className='trade-form-btn green-bg' disabled={btnDisabled} type="primary" htmlType="button" onClick={() => handleClkTrade('buy')}>
+              Buy <br></br> { new BigNumber(priceMap?.current_price).plus(new BigNumber(40)).toFormat() }
             </Button>
           </div>
           :
@@ -114,6 +129,44 @@ function TradeForm() {
           }
       </Form>
     </div>
+    
+
+    <Modal className="sty1-modal header-modal" centered width={386}  open={isModalOpen} footer={[]} closable={false}>
+      <div className='trade-openposi-success mui-fl-col mui-fl-vert'>
+        <i className="mico-success-2"></i>
+        <p className='title'>Successfully Opened</p>
+        <div className='trade-info'>
+          <p className='pair mui-fl-vert'>
+            <img src={activeTradePair?.icon} alt='' />
+            <span className='s1'>{ activeTradePair?.symbol_short }</span>
+            <span className={`s2 ${tradeType}`}>{ tradeType }</span>
+          </p>
+          <ul className='mui-fl-vert'>
+            <li className='mui-fl-1'>
+              <p>Size</p>
+              <p>{ form.getFieldsValue().size }</p>
+            </li>
+            <li className='mui-fl-1'>
+              <p>Leverage</p>
+              <p>{ form.getFieldsValue().leverage }</p>
+            </li>
+            <li className='mui-fl-1'>
+              <p>Margin</p>
+              <p>${ margin } <span>(±{ spread })</span> </p>
+            </li>
+          </ul>
+        </div>
+
+        <div className='sui-exploeer mui-fl-vert taplight2'>
+          <p>Sui Explorer</p>
+          <i className='mico-share' />
+        </div>
+
+        <Button className="trade-openposi-success-done" type="primary" size='large' shape="round" onClick={() => handleOk()}>
+            DONE
+        </Button>
+      </div>
+    </Modal>
     </>
   )
 }

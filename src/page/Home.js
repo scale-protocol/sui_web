@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import BigNumber from 'bignumber.js'
+// import BigNumber from 'bignumber.js'
 
-import { setPriceMap, setUserInfo, setActivePositions, setActiveTradePair } from './../store/action'
-import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
+import { setPriceMap, setUserInfo, setWsPositionUpdateData } from './../store/action'
+// import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
 import { getPositionsListFun } from './../utils/positions'
 
 import Header from '../components/Header';
@@ -56,19 +56,19 @@ function Home() {
         if (event === 'price_update') {
           dispatch(setPriceMap(data))
 
-          const _activePositions = JSON.parse(JSON.stringify(activePositions))
-          if(_activePositions) {
-            _activePositions.forEach(v => {
-              v.latest = keepDecimal2((new BigNumber(data.current_price).times(formatTenDecimalNum(-6))).toString(10))
-            })
-            dispatch(setActivePositions(_activePositions))
-          }
-
-          // const _activeTradePair = JSON.parse(JSON.stringify(activeTradePair))
-          // if (_activeTradePair) {
-          //   _activeTradePair.current_price = keepDecimal2((new BigNumber(data.current_price).times(formatTenDecimalNum(-6))).toString(10))
-          //   _activeTradePair.change_rate = keepDecimal2((new BigNumber(data.change_rate).times(formatTenDecimalNum(-2))).toString(10))
-          //   dispatch(setActiveTradePair(_activeTradePair))
+          // const _activePositions = [...activePositions]
+          // console.log('_activePositions', _activePositions)
+          // _activePositions.forEach(v => {
+          //   console.log('_activePositions', v)
+          //   // v.latest = keepDecimal2((new BigNumber(data.current_price).times(formatTenDecimalNum(-6))).toString(10))
+          // })
+          // dispatch(setActivePositions(_activePositions))
+          // console.log('price_update activePositions', activePositions)
+          // if (activePositions.length > 0) {
+          //   dispatch(updateActivePositions({
+          //     list: [...activePositions],
+          //     data
+          //   }))
           // }
 
 
@@ -78,17 +78,7 @@ function Home() {
 
           // 仓位更新
         } else if (event === 'position_update') {
-          if (activePositions) {
-            const _activePositions = JSON.parse(JSON.stringify(activePositions))
-            if (_activePositions) {
-              _activePositions.forEach(v => {
-                if (v.id === data.id) {
-                  v.profit = keepDecimal2((new BigNumber(data.profit).times(formatTenDecimalNum(-6))).toString(10))
-                }
-              })
-              dispatch(setActivePositions(_activePositions))
-            }
-          }
+          dispatch(setWsPositionUpdateData(data))
 
           // 开仓
         } else if (event === 'position_open') {
