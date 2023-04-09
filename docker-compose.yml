@@ -1,0 +1,8 @@
+version: '2'
+services:
+  influxdb:
+    image: tttlkkkl/sui_web:v2023040901
+    restart: always
+    container_name: scale-web
+    ports:
+      - 8088:3000
