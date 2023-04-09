@@ -25,7 +25,7 @@ function Charts() {
   const [chartLoading, setChartLoading] = useState(false)
   const activeTradePair = useSelector(state => state.activeTradePair);
 
-  const priceMap = useSelector(state => state.wsModule.wsPrice)
+  const priceMap = (useSelector(state => state.wsModule.wsPrice))
 
   const [chartsType] = useState([
     { txt: 'areaLine', icon: areaLineImg },
@@ -134,22 +134,24 @@ function Charts() {
             { activeTradePair?.symbol }
           </div>
           <ul className='mui-fl-vert numlist'>
-            <li className="p">${priceMap? priceMap?.current_price_format : activeTradePair?.opening_price}</li>
+            <li className="p">
+              ${priceMap? priceMap && priceMap[activeTradePair.symbol]?.current_price_format : activeTradePair?.opening_price}
+            </li>
             <li>
               <p>24H Change( %)</p>
-              <p className={priceMap ? (priceMap?.change_rate > 0 ? 'green' : 'red') : ''}>{ priceMap?.change_rate ? formatNum(priceMap?.change_rate) + '%' : '--' }</p>
+              <p className={priceMap ? (priceMap && priceMap[activeTradePair.symbol]?.change_rate > 0 ? 'green' : 'red') : ''}>{ priceMap && priceMap[activeTradePair.symbol]?.change_rate ? formatNum(priceMap && priceMap[activeTradePair.symbol]?.change_rate) + '%' : '--' }</p>
             </li>
             <li>
               <p>24H Change</p>
-              <p className={priceMap ? (priceMap?.change > 0 ? 'green' : 'red') : ''}>{ priceMap?.change ? formatNum(priceMap?.change, '$') : '--'}</p>
+              <p className={priceMap ? (priceMap && priceMap[activeTradePair.symbol]?.change > 0 ? 'green' : 'red') : ''}>{ priceMap && priceMap[activeTradePair.symbol]?.change ? formatNum(priceMap && priceMap[activeTradePair.symbol]?.change, '$') : '--'}</p>
             </li>
             <li>
               <p>24H High</p>
-              <p>{priceMap?.high_24h}</p>
+              <p>{priceMap && priceMap[activeTradePair.symbol]?.high_24h}</p>
             </li>
             <li>
               <p>24H Low</p>
-              <p>{priceMap?.low_24h}</p>
+              <p>{priceMap && priceMap[activeTradePair.symbol]?.low_24h}</p>
             </li>
           </ul>
         </div>

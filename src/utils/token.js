@@ -12,15 +12,15 @@ export const CONIN_ADMIN_CAP = '0x3d011dba7bee44532dd15ce93cd23bfe7e21723020414e
 export const CONIN_RESERVE = '0xdb4253053667d963ac4f58b67e9f0cbb65d1572c4eb05fc3b0d02e0c65f3dbed'
 
 // Scale 主合约
-export const PACKAGE_OBJECTID = '0xbf7c8581f2b1ee4132062b431537227477986cd846210d7a689f0207a9742604'
+export const PACKAGE_OBJECTID = '0x3d6c288df4121b6692887d21179fc800f58f67a910b55d558dda16d81cb4b016'
 export const MODULE = 'enter'
-export const ADMIN_CAP = '0x5d2ddbca324a51fd98a3d742abb3d3d71f3bd1f83b887d1f117b2d92a51fa075'
-export const SCALE_NFT_FACTORY = '0x09aca5df2057bd312167821b208981e8b1f8eb6bec4162a73edc3f0350a7cf66'
-export const MARKET_LIST = '0x40da0289a3bf57f75824b8a419a72bb8aceeccdd1d545ca2f435d40b2733c2d7'
+export const ADMIN_CAP = '0x128263eb58e7e86ccc23cc354cad0b7424260d1d70b4e56c570bfb305d992b99'
+export const SCALE_NFT_FACTORY = '0x092f61eab2a29d0342d44bd26ef6e1a73d6fff6dfa8e36a27829ca85968be4d7'
+export const MARKET_LIST = '0x61364206135302d7f620d29c9856440bf7575e78d938f9fffbb5e17877e8b2ee'
 
-export const MARKET = '0xfd8a967be00215082a4500701aff7628eda05409c3f8ad32db619ffd2f96ffee'  // 需要从 market 列表里面拿，不能写死哦~
+export const MARKET = '0x8e3f4ca1762a5bacff2513dd81883e53629f8ef2e7ca1e01bf5ed602781ed512'  // 需要从 market 列表里面拿，不能写死哦~
 export const TYPE = {
-  P: '0xbf7c8581f2b1ee4132062b431537227477986cd846210d7a689f0207a9742604::pool::Scale',
+  P: '0x3d6c288df4121b6692887d21179fc800f58f67a910b55d558dda16d81cb4b016::pool::Scale',
   T: '0xdea89441b410132ddda2b94de509027accce06bffcd5f03888cac8569e40bf0b::scale::SCALE'
 }
 

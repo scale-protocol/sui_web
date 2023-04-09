@@ -6,7 +6,7 @@ import { openPosition } from './../utils/sui'
 import { getPositionsListFun } from './../utils/positions'
 import { Button, Form, InputNumber, message, Modal } from 'antd';
 import './../assets/css/components/trade-form.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function TradeForm() {
   const { wallet } = ethos.useWallet();
@@ -17,6 +17,8 @@ function TradeForm() {
   const address = useSelector(state => state.accountModule.address);
   const activeTradePair = useSelector(state => state.activeTradePair);
   const priceMap = useSelector(state => state.wsModule.wsPrice)
+  const spreadMap = useSelector(state => state.spreadModule.spreadMap)
+  const halfSpread = spreadMap && (new BigNumber(spreadMap[activeTradePair?.id]?.spread).dividedBy(2))
 
   const dispatch = useDispatch();
   const [margin, setMargin] = useState('0.00')
@@ -30,14 +32,17 @@ function TradeForm() {
     if (!account) {
       messageApi.open({
         type: 'warning',
-        content: 'you need Sui Token to creat your margin account!'
+        content: 'you need Sui Token to creat your margin account!',
+        style: {
+          marginTop: 77
+        }
       })
       return
     }
     setTradeType(type)
     const values = form.getFieldsValue();
     const formatSize = (new BigNumber(values.size).times(formatTenDecimalNum(4))).toString(10)
-    const rp = await openPosition(wallet, account, formatSize, values.leverage.toString(), 1, type === 'sell' ? 2 : 1)
+    const rp = await openPosition(wallet, account, formatSize, values.leverage.toString(), 1, type === 'sell' ? 2 : 1, activeTradePair.id)
     if (rp.confirmedLocalExecution) {
       // messageApi.open({
       //   type: 'success',
@@ -50,7 +55,10 @@ function TradeForm() {
     } else {
       messageApi.open({
         type: 'warning',
-        content: 'Open Position fail, Please try again later.'
+        content: 'Open Position fail, Please try again later.',
+        style: {
+          marginTop: 77
+        }
       })
     }
   }
@@ -58,8 +66,8 @@ function TradeForm() {
   const handleIpt = () => {
     const values = form.getFieldsValue();
     if (values.size && values.leverage) {
-      const _margin = keepDecimal2(new BigNumber(values.size).times(new BigNumber(priceMap?.current_price)).dividedBy(new BigNumber(values.leverage))).toString(10)
-      const _spread = keepDecimal2(new BigNumber(values.size).times(new BigNumber(40)).dividedBy(values.leverage)).toString(10)
+      const _margin = keepDecimal2(new BigNumber(values.size).times(new BigNumber(priceMap[activeTradePair.symbol]?.current_price)).dividedBy(new BigNumber(values.leverage))).toString(10)
+      const _spread = keepDecimal2(new BigNumber(values.size).times(new BigNumber(halfSpread)).dividedBy(values.leverage)).toString(10)
       setMargin(_margin)
       setSpread(_spread)
       setBtnDisabled(false)
@@ -73,6 +81,14 @@ function TradeForm() {
   const handleOk = () => {
     setIsModalOpen(false)
   }
+
+  useEffect(() => {
+    const values = form.getFieldsValue();
+    if (values.size && values.leverage) {
+      const _margin = keepDecimal2(new BigNumber(values.size).times(new BigNumber(priceMap[activeTradePair.symbol]?.current_price)).dividedBy(new BigNumber(values.leverage))).toString(10)
+      setMargin(_margin)
+    }
+  }, [activeTradePair, form, priceMap])
 
 
   return (
@@ -113,11 +129,11 @@ function TradeForm() {
           {address ? 
           <div className='mui-fl-vert trade-form-btns'>
             <Button className='trade-form-btn red-bg' disabled={btnDisabled} type="primary" htmlType="button" onClick={() =>handleClkTrade('sell')}>
-              Sell <br></br> { new BigNumber(priceMap?.current_price).minus(new BigNumber(40)).toFormat() }
+              Sell <br></br> { new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).minus(new BigNumber(halfSpread)).toFormat() }
             </Button>
-            <p className='trade-form-rate'>80</p>
+            <p className='trade-form-rate'>{ spreadMap && spreadMap[activeTradePair?.id]?.spread }</p>
             <Button className='trade-form-btn green-bg' disabled={btnDisabled} type="primary" htmlType="button" onClick={() => handleClkTrade('buy')}>
-              Buy <br></br> { new BigNumber(priceMap?.current_price).plus(new BigNumber(40)).toFormat() }
+              Buy <br></br> { new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).plus(new BigNumber(halfSpread)).toFormat() }
             </Button>
           </div>
           :

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import BigNumber from 'bignumber.js'
 import { Modal, Button } from 'antd';
 
-import { setPriceMap, setUserInfo, setWsPositionUpdateData } from './../store/action'
+import { setPriceMap, setUserInfo, setWsPositionUpdateData, setSpreadMap } from './../store/action'
 // import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
 import { getPositionsListFun } from './../utils/positions'
 
@@ -28,6 +28,8 @@ function Home() {
   const activePositions = positionsModule.activePositions;
   const activeTradePair = useSelector(state => state.activeTradePair);
 
+  const marketsData = useSelector(state => state.market)
+
   const [wsUrl, setWsUrl] = useState('wss://dev-api.scale.exchange/ws?account=');
   const wsRef = useRef(null);
   const [connected, setConnected] = useState(false)
@@ -39,12 +41,14 @@ function Home() {
 
       newWs.onopen = () => {
         setConnected(false)
-        newWs.send(
-          JSON.stringify({
-              "symbol": "Crypto.BTC/USD",
-              "sub_type": "subscribe"
-          })
-        )
+        marketsData.forEach(v => {
+          newWs.send(
+            JSON.stringify({
+                "symbol": v.symbol,
+                "sub_type": "subscribe"
+            })
+          )
+        })
       }
 
       newWs.onclose = () => {
@@ -59,25 +63,6 @@ function Home() {
         // 价格更新
         if (event === 'price_update') {
           dispatch(setPriceMap(data))
-          if (priceMap && activeTradePair) {
-            document.title = `${priceMap?.current_price_format + ' | ' + activeTradePair?.symbol_short} | Scale`
-          }
-
-
-          // const _activePositions = [...activePositions]
-          // console.log('_activePositions', _activePositions)
-          // _activePositions.forEach(v => {
-          //   console.log('_activePositions', v)
-          //   // v.latest = keepDecimal2((new BigNumber(data.current_price).times(formatTenDecimalNum(-6))).toString(10))
-          // })
-          // dispatch(setActivePositions(_activePositions))
-          // console.log('price_update activePositions', activePositions)
-          // if (activePositions.length > 0) {
-          //   dispatch(updateActivePositions({
-          //     list: [...activePositions],
-          //     data
-          //   }))
-          // }
 
 
           // 账号更新
@@ -95,6 +80,9 @@ function Home() {
         } else if (event === 'position_close') {
           getPositionsListFun('active', account, dispatch)
           getPositionsListFun('history', account, dispatch)
+          // 点差
+        } else if (event === 'spread_update') {
+          dispatch(setSpreadMap(data))
         }
       }
     }
@@ -106,15 +94,16 @@ function Home() {
           setWsUrl(`wss://dev-api.scale.exchange/ws?account=${account}`)
       }
     }
-  }, [account, activePositions, connected, dispatch, userInfo, wsUrl]);
+  }, [account, activePositions, activeTradePair, connected, dispatch, marketsData, priceMap, userInfo, wsUrl]);
 
   // const isModalOpen = () => {}
-  const [isModalOpen, setIsModalOpen] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(localStorage.getItem('hasWelcome') ? false : true)
   const handleOk = () => {
     setIsModalOpen(false)
   }
   const handleCancel = () => {
     setIsModalOpen(false)
+    localStorage.setItem('hasWelcome', false)
   }
   return (
     <div>

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { CONIN_MODULE, CONIN_PACKAGE_OBJECTID, CONIN_RESERVE, PACKAGE_OBJECTID, MODULE, TYPE, ORACLE_ROOT, MARKET_LIST, MARKET } from './token'
+import { CONIN_MODULE, CONIN_PACKAGE_OBJECTID, CONIN_RESERVE, PACKAGE_OBJECTID, MODULE, TYPE, ORACLE_ROOT, MARKET_LIST } from './token'
 import { formatTenDecimalNum } from './filter'
 import { TransactionBlock } from 'ethos-connect'
 
@@ -117,10 +117,10 @@ export const withdraw  = async (wallet, account, amount) => {
 
 
 // 开仓
-export const openPosition  = async (wallet, account, size, leverage, position_type, direction) => {
+export const openPosition  = async (wallet, account, size, leverage, position_type, direction, market) => {
   console.log({
     market_list: MARKET_LIST,
-    market: MARKET,
+    market: market,
     account: account,
     root: ORACLE_ROOT,
     lot: size,
@@ -133,7 +133,7 @@ export const openPosition  = async (wallet, account, size, leverage, position_ty
     target: `${PACKAGE_OBJECTID}::${MODULE}::open_position`,
     arguments: [
       transactionBlock.pure(MARKET_LIST),
-      transactionBlock.pure(MARKET),
+      transactionBlock.pure(market),
       transactionBlock.pure(account),
       transactionBlock.pure(ORACLE_ROOT),
       transactionBlock.pure(size),
@@ -155,11 +155,11 @@ export const openPosition  = async (wallet, account, size, leverage, position_ty
 }
 
 // 关仓
-export const closePosition  = async (wallet, account, position) => {
+export const closePosition  = async (wallet, account, position, market) => {
   const transactionBlock = new TransactionBlock();
   console.log({
     MARKET_LIST,
-    MARKET,
+    market,
     account,
     ORACLE_ROOT,
     position
@@ -168,7 +168,7 @@ export const closePosition  = async (wallet, account, position) => {
     target: `${PACKAGE_OBJECTID}::${MODULE}::close_position`,
     arguments: [
       transactionBlock.pure(MARKET_LIST),
-      transactionBlock.pure(MARKET),
+      transactionBlock.pure(market),
       transactionBlock.pure(account),
       transactionBlock.pure(ORACLE_ROOT),
       transactionBlock.pure(position),

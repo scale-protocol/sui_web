@@ -39,21 +39,30 @@ function Header() {
     if (scaleObjectIds.length === 0) {
       messageApi.open({
         type: 'warning',
-        content: 'you need Sui Token to creat your margin account'
+        content: 'you need Sui Token to creat your margin account',
+        style: {
+          marginTop: 77
+        }
       })
       return
     }
 
     const rp = await createAccount(wallet, scaleObjectIds[0])
-    if (rp.confirmedLocalExecution === 'success') {
+    if (rp.confirmedLocalExecution) {
       messageApi.open({
         type: 'success',
-        content: 'Create Account Successful!'
+        content: 'Create Account Successful!',
+        style: {
+          marginTop: 77
+        }
       })
     } else {
       messageApi.open({
         type: 'warning',
-        content: 'Create Account fail, Please try again later'
+        content: 'Create Account fail, Please try again later',
+        style: {
+          marginTop: 77
+        }
       })
     }
   }, [messageApi, storeBalanceList, wallet])
@@ -128,7 +137,10 @@ function Header() {
     if (!account) {
       messageApi.open({
         type: 'warning',
-        content: 'you need Sui Token to creat your margin account!'
+        content: 'you need Sui Token to creat your margin account!',
+        style: {
+          marginTop: 77
+        }
       })
       return
     }
@@ -137,15 +149,24 @@ function Header() {
     if (modalActive === 'deposit') {
       try {
         const rp = await deposit(wallet, account, formatAmount, scaleObjectIds)
+        console.log('deposit', rp)
+        console.log('deposit', rp.confirmedLocalExecution)
+
         if (rp.confirmedLocalExecution) {
           messageApi.open({
             type: 'success',
-            content: 'Deposit Successful!'
+            content: 'Deposit Successful!',
+            style: {
+              marginTop: 77
+            }
           })
         } else {
           messageApi.open({
             type: 'warning',
-            content: 'Deposit fail, Please try again later.'
+            content: 'Deposit fail, Please try again later.',
+            style: {
+              marginTop: 77
+            }
           })
         }
       } catch (e) {
@@ -160,19 +181,28 @@ function Header() {
         if (rp.confirmedLocalExecution === 'success') {
           messageApi.open({
             type: 'success',
-            content: 'Withdraw Successful!'
+            content: 'Withdraw Successful!',
+            style: {
+              marginTop: 77
+            }
           })
         } else {
           messageApi.open({
             type: 'warning',
-            content: 'Withdraw fail, Please try again later'
+            content: 'Withdraw fail, Please try again later',
+            style: {
+              marginTop: 77
+            }
           })
         }
       } catch (e) {
         console.log('err', e)
         messageApi.open({
           type: 'error',
-          content: e.message
+          content: e.message,
+          style: {
+            marginTop: 77
+          }
         })
       }
     }
@@ -212,7 +242,6 @@ function Header() {
   // );
   // const text = <span>Title</span>;
   
-
   return (
     <>
     {contextHolder}

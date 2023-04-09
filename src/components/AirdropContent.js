@@ -54,12 +54,18 @@ function AirdropContent() {
       await ethos.dripSui({ address: wallet.address });
       messageApi.open({
         type: 'success',
-        content: 'Claim SUI successful.'
+        content: 'Claim SUI successful.',
+        style: {
+          marginTop: 77
+        }
       })
     } catch (e) {
       messageApi.open({
         type: 'warning',
-        content: 'Too many requests Please try again later.'
+        content: 'Too many requests Please try again later.',
+        style: {
+          marginTop: 77
+        }
       })
     }
     setSuiBtnLoading(false)
@@ -74,12 +80,18 @@ function AirdropContent() {
       if (rp?.confirmedLocalExecution) {
         messageApi.open({
           type: 'success',
-          content: 'Airdrop Successful!'
+          content: 'Airdrop Successful!',
+          style: {
+            marginTop: 77
+          }
         })
       } else {
         messageApi.open({
           type: 'warning',
-          content: 'Airdrop fail, Please try again later!'
+          content: 'Airdrop fail, Please try again later!',
+          style: {
+            marginTop: 77
+          }
         })
       }
     } catch (e) {
@@ -87,7 +99,10 @@ function AirdropContent() {
       
       messageApi.open({
         type: 'warning',
-        content: 'Airdrop fail, Please try again later!'
+        content: 'Airdrop fail, Please try again later!',
+        style: {
+          marginTop: 77
+        }
       })
     }
     setBtnLoading(false)

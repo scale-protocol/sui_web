@@ -23,16 +23,6 @@ export const setProvider = provider => ({
   provider
 })
 
-export const setMarketListData = marketListData => ({
-  type: 'SET_MARKETLIST_DATA',
-  marketListData
-})
-
-export const setActiveTradePair = activeTradePair => ({
-  type: 'SET_ACTIVE_TRADE_PAIR',
-  activeTradePair
-})
-
 export const setUserInfo = userinfo => ({
   type: 'SET_USER_INFO',
   userinfo
@@ -59,4 +49,19 @@ export const setWsPositionUpdateData = wsData => ({
   wsData
 })
 
+// market
+export const setMarketListData = marketListData => ({
+  type: 'SET_MARKETLIST_DATA',
+  marketListData
+})
 
+export const setActiveTradePair = activeTradePair => ({
+  type: 'SET_ACTIVE_TRADE_PAIR',
+  activeTradePair
+})
+
+// 点差
+export const setSpreadMap = spreadMap => ({
+  type: 'SET_SPREADMAP',
+  spreadMap
+})

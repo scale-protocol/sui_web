@@ -9,7 +9,7 @@ const userInfo = (state = null, action) => {
           balance: new BigNumber(keepDecimal2((new BigNumber(action.userinfo.balance).times(formatTenDecimalNum(-6))).toString(10))).toFormat(),
         }
         if (action.userinfo?.margin_percentage) {
-          obj.margin_percentage = new BigNumber((new BigNumber(action.userinfo.margin_percentage)).times(BIG_TEN.pow(2)).toString(10)).toFormat()
+          obj.margin_percentage = (new BigNumber(action.userinfo.margin_percentage)).times(BIG_TEN.pow(2)).toString(10)
         }
         return Object.assign({},action.userinfo, obj)
   

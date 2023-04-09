@@ -2,14 +2,9 @@ import { Button, Space, Table, Tabs, message } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ethos } from "ethos-connect";
-// import BigNumber from 'bignumber.js'
 
 import { closePosition } from './../utils/sui'
-// import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
-
 import './../assets/css/components/positions.css'
-// import API from "../api/api";
-
 import { getPositionsListFun } from './../utils/positions'
 import { formatNum } from '../utils/filter';
 
@@ -26,6 +21,7 @@ function Positions() {
   const positionsModule = useSelector(state => state.positionsModule)
   const activePositions = positionsModule.activePositions;
   const historyPositions = positionsModule.historyPositions;
+  const activeTradePair = useSelector(state => state.activeTradePair);
   // const wsPositionUpdateData = positionsModule.wsPositionUpdateData;
 
   const dispatch = useDispatch();
@@ -37,7 +33,7 @@ function Positions() {
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.order - b.order,
       key: 'order',
-      dataIndex: 'formatID',
+      dataIndex: 'symbol_short',
       width: 152
     },
     {
@@ -73,7 +69,7 @@ function Positions() {
       key: 'latest',
       width: 152,
       render: (_, record) => (
-          <p>{ priceMap?.current_price_format }</p>
+          <p>{ priceMap && priceMap[record.symbol]?.current_price }</p>
       ),
     },
     {
@@ -109,7 +105,7 @@ function Positions() {
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.order - b.order,
       key: 'order',
-      dataIndex: 'formatID',
+      dataIndex: 'symbol_short',
       width: 200
     },
     {
@@ -199,11 +195,14 @@ function Positions() {
 
   const handleActiveClose = useCallback(async (record) => {
     try {
-      const rp = await closePosition(wallet, account, record.id)
+      const rp = await closePosition(wallet, account, record.id, activeTradePair.id)
       if (rp.confirmedLocalExecution) {
         messageApi.open({
           type: 'success',
-          content: 'Close Position successful.'
+          content: 'Close Position successful.',
+          style: {
+            marginTop: 77
+          }
         })
         setTimeout(() => {
           getPositionsListFun('active', account, dispatch)
@@ -212,13 +211,19 @@ function Positions() {
       } else {
         messageApi.open({
           type: 'warning',
-          content: 'Close Position fail, Please try again later.'
+          content: 'Close Position fail, Please try again later.',
+          style: {
+            marginTop: 77
+          }
         })
       }
     } catch (e) {
       messageApi.open({
         type: 'error',
-        content: e.message
+        content: e.message,
+        style: {
+          marginTop: 77
+        }
       })
     }
   }, [account, dispatch, messageApi, wallet])
