@@ -5,4 +5,4 @@ services:
     restart: always
     container_name: scale-web
     ports:
-      - 8088:3000
+      - 8099:3000
