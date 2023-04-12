@@ -2,11 +2,6 @@ import { combineReducers } from '@reduxjs/toolkit';
 import { formatTenDecimalNum,  keepDecimal2 } from './../../utils/filter'
 import BigNumber from 'bignumber.js'
 
-import market from './market'
-console.log('market', market)
-// const initialState = {
-  
-// }
 const spreadMap = (state = null, action) => {
   switch (action.type) {
     case 'SET_SPREADMAP': 

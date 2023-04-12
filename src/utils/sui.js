@@ -1,24 +1,36 @@
 import BigNumber from 'bignumber.js'
-import { CONIN_MODULE, CONIN_PACKAGE_OBJECTID, CONIN_RESERVE, PACKAGE_OBJECTID, MODULE, TYPE, ORACLE_ROOT, MARKET_LIST } from './token'
+import { CONIN_MODULE, CONIN_PACKAGE_OBJECTID, CONIN_RESERVE, PACKAGE_OBJECTID, MODULE, TYPE, ORACLE_ROOT, MARKET_LIST, MARKET } from './token'
 import { formatTenDecimalNum } from './filter'
 import { TransactionBlock } from 'ethos-connect'
 
 // 空投
-export const airdrop = async (wallet, objectIds) => {
-  const amount = (new BigNumber(50000).times(formatTenDecimalNum(6))).toString(10)
+export const airdrop = async (wallet) => {
+  // const transactionBlock = new TransactionBlock();
+  //   transactionBlock.moveCall({
+  //     target: `0xb2a4c86233ad80cfa5706a54fabf87d589f2f34e5d8d5d4967a0c143beb17cf6::ethos_example_nft::mint_to_sender`,
+  //     arguments: [
+  //       transactionBlock.pure("Ethos Example NFT"),
+  //       transactionBlock.pure("A sample NFT from Ethos Wallet."),
+  //       transactionBlock.pure("https://ethoswallet.xyz/assets/images/ethos-email-logo.png"),
+  //     ]
+  //   })
+
+  //   const response = await wallet.signAndExecuteTransactionBlock({
+  //     transactionBlock,
+  //     options: {
+  //       showObjectChanges: true,
+  //     }
+  //   });
+  //   console.log('response', response)
+  const amount = (new BigNumber(10000).times(formatTenDecimalNum(6))).toString(10)
   const transactionBlock = new TransactionBlock();
 
-  const vec = transactionBlock.makeMoveVec({
-    objects: objectIds.map(id => transactionBlock.object(id))
-  });
   transactionBlock.moveCall({
     target: `${CONIN_PACKAGE_OBJECTID}::${CONIN_MODULE}::airdrop`,
     arguments: [
       transactionBlock.pure(CONIN_RESERVE),
-      vec,
       transactionBlock.pure(amount),
-    ],
-    gasBudget: 100000
+    ]
   })
   const response = await wallet.signAndExecuteTransactionBlock({
     transactionBlock,
@@ -133,7 +145,8 @@ export const openPosition  = async (wallet, account, size, leverage, position_ty
     target: `${PACKAGE_OBJECTID}::${MODULE}::open_position`,
     arguments: [
       transactionBlock.pure(MARKET_LIST),
-      transactionBlock.pure(market),
+      // transactionBlock.pure(market),
+      transactionBlock.pure(MARKET),
       transactionBlock.pure(account),
       transactionBlock.pure(ORACLE_ROOT),
       transactionBlock.pure(size),

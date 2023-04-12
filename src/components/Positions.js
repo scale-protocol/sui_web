@@ -22,8 +22,8 @@ function Positions() {
   const activePositions = positionsModule.activePositions;
   const historyPositions = positionsModule.historyPositions;
   const activeTradePair = useSelector(state => state.activeTradePair);
-  // const wsPositionUpdateData = positionsModule.wsPositionUpdateData;
-
+  const wsPositionUpdateData = positionsModule.wsPositionUpdateData;
+  console.log('wsPositionUpdateData', wsPositionUpdateData)
   const dispatch = useDispatch();
 
 
@@ -74,9 +74,15 @@ function Positions() {
     },
     {
       title: 'Profit',
-      dataIndex: 'profit',
       key: 'profit',
-      width: 152
+      width: 152,
+      render: (_, record) => (
+        <Space>
+          <p className={wsPositionUpdateData && wsPositionUpdateData?.[record.id] > 0 ? 'green' : 'red'}>
+            { formatNum(wsPositionUpdateData?.[record.id], '$') }
+          </p>
+        </Space>
+      ),
     },
     {
       title: 'Margin',
@@ -226,21 +232,33 @@ function Positions() {
         }
       })
     }
-  }, [account, dispatch, messageApi, wallet])
+  }, [account, activeTradePair?.id, dispatch, messageApi, wallet])
 
   const handleHistoryView = useCallback((record) => {
     window.open(`https://explorer.sui.io/object/${record.id}?network=devnet`)
   }, [])
-
+  
   useEffect(() => {
+    // if (activePositions.length > 0 && wsPositionUpdateData) {
+    //   console.log('wsPositionUpdateData', wsPositionUpdateData)
+    //   let updateData = null
+    //   updateData = activePositions.map(v => {
+    //     if (v.id === wsPositionUpdateData?.id) {
+    //       console.log('======', wsPositionUpdateData.profit)
+    //       const asd = Object.assign({}, {...v}, {profit: wsPositionUpdateData.profit})
+    //       console.log('asd', asd)
+    //       return asd
+    //     }
+    //     // console.log({...v})
+    //     return {...v}
+    //   })
+    //   dispatch(setActivePositions(updateData))
+
+    // } else {
+    //   getPositionsList()
+    // }
+    
     getPositionsList()
-    // const _activePositions = JSON.parse(JSON.stringify(activePositions))
-    // _activePositions.forEach(v => {
-    //   if (v.id === wsPositionUpdateData?.id) {
-    //     v.profit = keepDecimal2((new BigNumber(wsPositionUpdateData.profit).times(formatTenDecimalNum(-6))).toString(10))
-    //   }
-    // })
-    // setForActivePositions(_activePositions)
   }, [getPositionsList])
 
   return (

@@ -34,7 +34,16 @@ function Header() {
 
 
   const createAccountFun = useCallback(async () => {
-    if (storeBalanceList.length === 0) return
+    if (storeBalanceList.length === 0) {
+      messageApi.open({
+        type: 'warning',
+        content: 'you need Sui Token to creat your margin account',
+        style: {
+          marginTop: 77
+        }
+      })
+      return
+    }
     const scaleObjectIds = getTokenObjectIds(storeBalanceList || '[]', 'SCALE')
     if (scaleObjectIds.length === 0) {
       messageApi.open({
@@ -149,8 +158,6 @@ function Header() {
     if (modalActive === 'deposit') {
       try {
         const rp = await deposit(wallet, account, formatAmount, scaleObjectIds)
-        console.log('deposit', rp)
-        console.log('deposit', rp.confirmedLocalExecution)
 
         if (rp.confirmedLocalExecution) {
           messageApi.open({

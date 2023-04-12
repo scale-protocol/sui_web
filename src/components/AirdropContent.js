@@ -75,8 +75,8 @@ function AirdropContent() {
     if (!wallet && !address) return
     setBtnLoading(true)
     try {
-      const suiObjectIds = getTokenObjectIds(JSON.stringify(balanceList), 'SUI')
-      const rp = await airdrop(wallet, suiObjectIds.slice(0, 1))
+      // const suiObjectIds = getTokenObjectIds(JSON.stringify(balanceList), 'SUI')
+      const rp = await airdrop(wallet)
       if (rp?.confirmedLocalExecution) {
         messageApi.open({
           type: 'success',

@@ -1,4 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit';
+import { formatTenDecimalNum,  keepDecimal2 } from './../../utils/filter'
+import BigNumber from 'bignumber.js'
 
 const activePositions = (state = [], action) => {
   switch (action.type) {
@@ -24,7 +26,10 @@ const historyPositions = (state = null, action) => {
 const wsPositionUpdateData = (state = null, action) => {
   switch (action.type) {
     case 'SET_WS_POSITION_UPDAT': 
-    return action.wsData
+    return {
+      ...state,
+      [action.wsData.id]: keepDecimal2((new BigNumber(action.wsData.profit).times(formatTenDecimalNum(-6))).toString(10))
+    }
 
     default: 
       return state
