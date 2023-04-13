@@ -28,6 +28,7 @@ function Market() {
       market.forEach(v => {
         v.opening_price = keepDecimal2((new BigNumber(v.opening_price).times(formatTenDecimalNum(-6))).toString(10))
       })
+      console.log('market', market)
       dispatch(setActiveTradePair(market[0]));
       dispatch(setMarketListData(market))
     });
