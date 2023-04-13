@@ -8,13 +8,13 @@ import './../assets/css/components/positions.css'
 import { getPositionsListFun } from './../utils/positions'
 import { formatNum } from '../utils/filter';
 
-
 function Positions() {
   const [messageApi, contextHolder] = message.useMessage()
 
   const { wallet } = ethos.useWallet();
   const accountModule = useSelector(state => state.accountModule)
   const account = accountModule.account;
+  const address = accountModule.address;
   const [tabActive, setTabActive] = useState('active')
   const priceMap = useSelector(state => state.wsModule.wsPrice)
 
@@ -23,7 +23,6 @@ function Positions() {
   const historyPositions = positionsModule.historyPositions;
   const activeTradePair = useSelector(state => state.activeTradePair);
   const wsPositionUpdateData = positionsModule.wsPositionUpdateData;
-  console.log('wsPositionUpdateData', wsPositionUpdateData)
   const dispatch = useDispatch();
 
 
@@ -33,8 +32,15 @@ function Positions() {
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.order - b.order,
       key: 'order',
-      dataIndex: 'symbol_short',
-      width: 152
+      width: 152,
+      render: (_, record) => (
+        <Space>
+          <div className='mui-fl-vert positions-order'>
+            <img src={record.icon}  alt='asd'/>
+            <span>{record.symbol_short}</span>
+          </div>
+        </Space>
+      ),
     },
     {
       title: 'Type',
@@ -79,7 +85,7 @@ function Positions() {
       render: (_, record) => (
         <Space>
           <p className={wsPositionUpdateData && wsPositionUpdateData?.[record.id] > 0 ? 'green' : 'red'}>
-            { formatNum(wsPositionUpdateData?.[record.id], '$') }
+            { formatNum((wsPositionUpdateData?.[record.id]) || 0, '$') }
           </p>
         </Space>
       ),
@@ -111,8 +117,15 @@ function Positions() {
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.order - b.order,
       key: 'order',
-      dataIndex: 'symbol_short',
-      width: 200
+      width: 200,
+      render: (_, record) => (
+        <Space>
+          <div className='mui-fl-vert positions-order'>
+            <img src={record.icon}  alt='asd'/>
+            <span>{record.symbol_short}</span>
+          </div>
+        </Space>
+      ),
     },
     {
       title: 'Type',
@@ -137,9 +150,15 @@ function Positions() {
       )
     },
     {
+      title: 'Open',
+      dataIndex: 'open_price',
+      key: 'open_price',
+      width: 200
+    },
+    {
       title: 'Close Price',
       dataIndex: 'close_price',
-      key: 'close',
+      key: 'close_price',
       width: 200
     },
     // {
@@ -152,7 +171,9 @@ function Positions() {
       key: 'profit',
       width: 200,
       render: (_, record) => (
-          <p className={record.profit > 0 ? 'green' : 'red'}>{ formatNum(record.profit, '$') }</p>
+          <Space>
+            <p className={record.profit > 0 ? 'green' : 'red'}>{ formatNum(record.profit, '$') }</p>
+          </Space>
       )
     },
     {
@@ -164,7 +185,7 @@ function Positions() {
       ),
     },
     {
-      title: 'Action',
+      title: 'Sui Explorer',
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
@@ -180,12 +201,12 @@ function Positions() {
     {
       key: 'active',
       label: `Position`,
-      children: <Table columns={activeColumns} dataSource={activePositions} />,
+      children: <Table columns={activeColumns} dataSource={address ? activePositions : []} />,
     },
     {
       key: 'history',
       label: `History`,
-      children: <Table columns={historyColumns} dataSource={historyPositions} />,
+      children: <Table columns={historyColumns} dataSource={address ? historyPositions : []} />,
     }
   ]
 

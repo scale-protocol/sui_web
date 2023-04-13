@@ -145,8 +145,8 @@ export const openPosition  = async (wallet, account, size, leverage, position_ty
     target: `${PACKAGE_OBJECTID}::${MODULE}::open_position`,
     arguments: [
       transactionBlock.pure(MARKET_LIST),
-      // transactionBlock.pure(market),
-      transactionBlock.pure(MARKET),
+      transactionBlock.pure(market),
+      // transactionBlock.pure(MARKET),
       transactionBlock.pure(account),
       transactionBlock.pure(ORACLE_ROOT),
       transactionBlock.pure(size),

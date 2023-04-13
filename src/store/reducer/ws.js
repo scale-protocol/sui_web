@@ -1,5 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { formatTenDecimalNum,  keepDecimal2 } from './../../utils/filter'
+import { formatTenDecimalNum,  keepDecimal2, addPosNeg } from './../../utils/filter'
 import BigNumber from 'bignumber.js'
 
 const wsPrice = (state = null, action) => {
@@ -13,8 +13,8 @@ const wsPrice = (state = null, action) => {
           "change": keepDecimal2((new BigNumber(action.priceMap.change).times(formatTenDecimalNum(-6))).toString(10)),
           "high_24h": new BigNumber(keepDecimal2((new BigNumber(action.priceMap.high_24h).times(formatTenDecimalNum(-6))).toString(10))).toFormat(),
           "low_24h": new BigNumber(keepDecimal2((new BigNumber(action.priceMap.low_24h).times(formatTenDecimalNum(-6))).toString(10))).toFormat(),
-          "current_price": keepDecimal2((new BigNumber(action.priceMap.current_price).times(formatTenDecimalNum(-6))).toString(10)),
-          "current_price_format": new BigNumber(keepDecimal2((new BigNumber(action.priceMap.current_price).times(formatTenDecimalNum(-6))).toString(10))).toFormat()
+          "current_price": addPosNeg((new BigNumber(action.priceMap.current_price).times(formatTenDecimalNum(-6))).toString(10), false, action.priceMap.symbol === 'Crypto.DOGE/USD' ? 6 : 2),
+          "current_price_format": new BigNumber(addPosNeg((new BigNumber(action.priceMap.current_price).times(formatTenDecimalNum(-6))).toString(10), false, action.priceMap.symbol === 'Crypto.DOGE/USD' ? 6 : 2)).toFormat()
         }
       }
 

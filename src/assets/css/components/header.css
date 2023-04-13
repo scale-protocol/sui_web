@@ -175,3 +175,11 @@ i {
   line-height: 16px;
   color: rgba(0, 0, 0, 0.45);
 }
+
+.header-popover-content {
+  width: 116px;
+  font-size: 14pxtaplight2;
+  line-height: 18px;
+  letter-spacing: -0.04em;
+  color: #E76464;
+}

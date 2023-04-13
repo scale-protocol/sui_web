@@ -7,6 +7,7 @@ const userInfo = (state = null, action) => {
       case 'SET_USER_INFO': 
         const obj = {
           balance: new BigNumber(keepDecimal2((new BigNumber(action.userinfo.balance).times(formatTenDecimalNum(-6))).toString(10))).toFormat(),
+          margin_total: new BigNumber(keepDecimal2((new BigNumber(action.userinfo.margin_total).times(formatTenDecimalNum(-6))).toString(10))).toFormat(),
         }
         if (action.userinfo?.margin_percentage) {
           obj.margin_percentage = (new BigNumber(action.userinfo.margin_percentage)).times(BIG_TEN.pow(2)).toString(10)

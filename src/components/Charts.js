@@ -9,7 +9,7 @@ import API from './../api/api'
 import './../assets/css/components/charts.css'
 import candleImg from './../assets/img/candle.png'
 import areaLineImg from './../assets/img/areaLine.png'
-import { formatNum } from './../utils/filter'
+import { formatNum, formatTenDecimalNum } from './../utils/filter'
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -95,17 +95,17 @@ function Charts() {
         if (type === 'history') {
           result.data.forEach((v) => {
             v.time = parseInt(Date.parse(v.time.toString()) / 1000)
-            v.value = Number(new BigNumber(v.value).idiv(new BigNumber(1000000)).toString(10))
+            v.value = Number((new BigNumber(v.value).times(formatTenDecimalNum(-6))).toString(10))
           })
           SetChartData(result.data)
         }
         if (type === 'history_full') {
           result.data.forEach((v) => {
             v.time = Date.parse(v.stop_time) / 1000
-            v.open = v.open / 1000000
-            v.close = v.close / 1000000
-            v.low = v.low / 1000000
-            v.high = v.high / 1000000
+            v.open = Number((new BigNumber(v.open).times(formatTenDecimalNum(-6))).toString(10))
+            v.close = Number((new BigNumber(v.close).times(formatTenDecimalNum(-6))).toString(10))
+            v.low = Number((new BigNumber(v.low).times(formatTenDecimalNum(-6))).toString(10))
+            v.high = Number((new BigNumber(v.high).times(formatTenDecimalNum(-6))).toString(10))
           })
           SetChartData(result.data)
         }
@@ -119,6 +119,8 @@ function Charts() {
 
   const switchChartsType = useCallback((type) => {
     setChartsTypeActive(() => type)
+    areaLineChat = null
+    candleChat = null
   }, [])
 
   useEffect(() => {
@@ -139,11 +141,11 @@ function Charts() {
             </li>
             <li>
               <p>24H Change( %)</p>
-              <p className={priceMap ? (priceMap && priceMap[activeTradePair.symbol]?.change_rate > 0 ? 'green' : 'red') : ''}>{ priceMap && priceMap[activeTradePair.symbol]?.change_rate ? formatNum(priceMap && priceMap[activeTradePair.symbol]?.change_rate) + '%' : '--' }</p>
+              <p className={priceMap ? (priceMap && priceMap[activeTradePair.symbol]?.change_rate > 0 ? 'green' : 'red') : ''}>{ priceMap && priceMap[activeTradePair.symbol]?.change_rate ? formatNum((priceMap && priceMap[activeTradePair.symbol]?.change_rate) || 0) + '%' : '--' }</p>
             </li>
             <li>
               <p>24H Change</p>
-              <p className={priceMap ? (priceMap && priceMap[activeTradePair.symbol]?.change > 0 ? 'green' : 'red') : ''}>{ priceMap && priceMap[activeTradePair.symbol]?.change ? formatNum(priceMap && priceMap[activeTradePair.symbol]?.change, '$') : '--'}</p>
+              <p className={priceMap ? (priceMap && priceMap[activeTradePair.symbol]?.change > 0 ? 'green' : 'red') : ''}>{ priceMap && priceMap[activeTradePair.symbol]?.change ? formatNum((priceMap && priceMap[activeTradePair.symbol]?.change) || 0, '$') : '--'}</p>
             </li>
             <li>
               <p>24H High</p>

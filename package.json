@@ -13,6 +13,7 @@
     "bignumber.js": "^9.1.1",
     "ethos-connect": "^0.0.133",
     "lightweight-charts": "^4.0.1",
+    "number-precision": "^1.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
