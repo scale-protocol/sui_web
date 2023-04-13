@@ -1,4 +1,4 @@
-// import { createChart } from 'lightweight-charts'
+import np from './number-precision'
 import BigNumber from 'bignumber.js'
 const BIG_TEN = new BigNumber(10)
 
@@ -37,5 +37,23 @@ export const keepDecimal2 = (num) =>{
  * 返回带有加减号的数字
  */
 export const formatNum = (num, type='') =>{
-  return num > 0 ? `+${type+num}` : `-${type+Math.abs(num)}`
+  if (np.isNum(num)) {
+    return num > 0 ? `+${type+num}` : `-${type+Math.abs(num)}`
+  }
+  return num
+}
+
+/**
+ * 返回一个前面带正负号且保留指定小数位（不足补零）的字符串
+ * @param {boolean} needPos 是否需要补 “+” 号
+ * @param {number} radio 保留的小数位数，默认 2
+ */
+export function addPosNeg (num, needPos, radio = 2) {
+  if (np.isNum(num)) {
+    const n = np.round(Number(num), radio)
+    const f = n.toFixed(radio)
+    return n > 0 && needPos ? '+' + f : f
+  } else {
+    return num
+  }
 }

@@ -2,12 +2,12 @@ import { ethos, SignInButton } from "ethos-connect";
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import BigNumber from 'bignumber.js'
-import { Modal, Input, message } from 'antd';
+import { Modal, Input, message, Popover } from 'antd';
 import { JsonRpcProvider } from '@mysten/sui.js'
 
 import API from "../api/api";
 import { setAccount, setAddress, setWallet, setBalanceList, setProvider, setUserInfo } from './../store/action'
-import { formatAddress, getTokenObjectIds, formatTenDecimalNum,  keepDecimal2, formatNum } from './../utils/filter'
+import { formatAddress, getTokenObjectIds,  keepDecimal2, formatNum } from './../utils/filter'
 import { PACKAGE_OBJECTID } from './../utils/token'
 import { deposit, withdraw, createAccount } from './../utils/sui'
 import './../assets/css/components/header.css'
@@ -135,7 +135,7 @@ function Header() {
     
     if (account) {
       API.getAccountInfo(account).then(result => {
-        result.data.margin_total = keepDecimal2((new BigNumber(result.data.margin_total).times(formatTenDecimalNum(-6))).toString(10))
+        // result.data.margin_total = keepDecimal2((new BigNumber(result.data.margin_total).times(formatTenDecimalNum(-6))).toString(10))
         dispatch(setUserInfo(result.data));
       });
     }
@@ -240,14 +240,19 @@ function Header() {
     }
     setInputValue(e.target.value);
   };
+  const handleLogOut = useCallback(async () => {
+    if (!wallet) return
+    const asd = await wallet.disconnect()
+    console.log('asd', asd)
+    dispatch(setAccount(''))
+    dispatch(setAddress(''))  // 存 address
+  }, [dispatch, wallet])
 
-  // const content = (
-  //   <div>
-  //     <p>{formatAddress(address)}</p>
-  //     <p>Content</p>
-  //   </div>
-  // );
-  // const text = <span>Title</span>;
+  const content = (
+    <div className="header-popover-content">
+      <p className="taplight2" onClick={() => handleLogOut()}>Log out</p>
+    </div>
+  );
   
   return (
     <>
@@ -269,11 +274,11 @@ function Header() {
                 </li>
                 <li>
                   <p>Margin</p>
-                  <p>$ {userInfo? new BigNumber(userInfo?.margin_total).toFormat() : '--'}</p>
+                  <p>$ {userInfo? userInfo?.margin_total : '--'}</p>
                 </li>
                 <li>
                   <p>Margin Level</p>
-                  <p>{userInfo && userInfo?.margin_percentage ? formatNum(userInfo?.margin_percentage) + '%' : '--'}</p>
+                  <p>{userInfo && userInfo?.margin_percentage ? formatNum((userInfo?.margin_percentage || 0)) + '%' : '--'}</p>
                 </li>
                 <li className="condition mui-fl-vert">
                   <i className="mico-success"></i>
@@ -306,12 +311,12 @@ function Header() {
                 </span>
               </SignInButton>
             ) : (
-              // <Popover placement="bottom" title={text} content={content} trigger="click">
+              <Popover placement="bottom" content={content} trigger="click">
                 <div className="connect-btn address-btn mui-fl-vert taplight">
                   <span>{formatAddress(accountModule.address)}</span>
                   <i className="mico-arrow-right" />
                 </div>
-              // </Popover>
+              </Popover>
             )}
           </div>
         </div>

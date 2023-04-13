@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useDispatch, useSelector } from 'react-redux';
 import { ethos, SignInButton } from "ethos-connect";
-import { formatTenDecimalNum, keepDecimal2 } from './../utils/filter'
+import { formatTenDecimalNum, keepDecimal2, addPosNeg } from './../utils/filter'
 import { openPosition } from './../utils/sui'
 import { getPositionsListFun } from './../utils/positions'
 import { Button, Form, InputNumber, message, Modal } from 'antd';
@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 
 function TradeForm() {
   const { wallet } = ethos.useWallet();
+  
   const [messageApi, contextHolder] = message.useMessage()
 
   const [form] = Form.useForm();
@@ -48,10 +49,12 @@ function TradeForm() {
       //   type: 'success',
       //   content: 'Open Position Successful!'
       // })
+      form.resetFields()
       setIsModalOpen(true)
       setTimeout(() => {
         getPositionsListFun('active', account, dispatch)
       }, 3000)
+      
     } else {
       messageApi.open({
         type: 'warning',
@@ -129,11 +132,11 @@ function TradeForm() {
           {address ? 
           <div className='mui-fl-vert trade-form-btns'>
             <Button className='trade-form-btn red-bg' disabled={btnDisabled} type="primary" htmlType="button" onClick={() =>handleClkTrade('sell')}>
-              Sell <br></br> { new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).minus(new BigNumber(halfSpread)).toFormat() }
+              Sell <br></br> { addPosNeg(new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).minus(new BigNumber(halfSpread)).toString(10), false, activeTradePair?.point || 2) }
             </Button>
-            <p className='trade-form-rate'>{ spreadMap && spreadMap[activeTradePair?.id]?.spread }</p>
+            <p className='trade-form-rate'>{ spreadMap && Math.ceil(spreadMap[activeTradePair?.id]?.spread) }</p>
             <Button className='trade-form-btn green-bg' disabled={btnDisabled} type="primary" htmlType="button" onClick={() => handleClkTrade('buy')}>
-              Buy <br></br> { new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).plus(new BigNumber(halfSpread)).toFormat() }
+              Buy <br></br> { addPosNeg(new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).plus(new BigNumber(halfSpread)).toString(10), false, activeTradePair?.point || 2) }
             </Button>
           </div>
           :

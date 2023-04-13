@@ -17,6 +17,7 @@ function Market() {
     API.getMarkets().then(result => {
       const _data = []
       result.data.forEach(v => {
+        v.point = v.symbol_short === 'DOGE-USD' ? 6 : 2
         if (v.symbol_short === 'BTC-USD') {
           _data.unshift(v)
         } else {
@@ -52,7 +53,7 @@ function Market() {
               </div>
               
               <p className={priceMap && priceMap[item.symbol] && priceMap[item.symbol].change_rate > 0 ? 'changeP green' : 'changeP red'}>
-                {priceMap && priceMap[item.symbol] ? formatNum(priceMap[item.symbol].change_rate) + '%' : '--'}
+                {priceMap && priceMap[item.symbol] ? formatNum((priceMap[item.symbol].change_rate) || 0) + '%' : '--'}
               </p>
             </li>
           })

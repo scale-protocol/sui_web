@@ -21,9 +21,11 @@ function Home() {
   const userInfo = useSelector(state => state.userInfo)
   const positionsModule = useSelector(state => state.positionsModule)
   const activePositions = positionsModule.activePositions
-
   const marketsData = useSelector(state => state.market)
+  const priceMap = useSelector(state => state.wsModule.wsPrice)
+  const activeTradePair = useSelector(state => state.activeTradePair);
 
+  document.title = (priceMap && priceMap[activeTradePair.symbol] && `${priceMap[activeTradePair.symbol].current_price} | ${activeTradePair.symbol_short} | Scale`) || 'Scale'
   const [wsUrl, setWsUrl] = useState('wss://dev-api.scale.exchange/ws?account=');
   const wsRef = useRef(null);
   const [connected, setConnected] = useState(false)
@@ -58,7 +60,6 @@ function Home() {
           // 价格更新
           if (event === 'price_update') {
             dispatch(setPriceMap(data))
-  
   
             // 账号更新
           } else if (event === 'account_update') {

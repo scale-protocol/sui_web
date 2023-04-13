@@ -8,13 +8,13 @@ import './../assets/css/components/positions.css'
 import { getPositionsListFun } from './../utils/positions'
 import { formatNum } from '../utils/filter';
 
-
 function Positions() {
   const [messageApi, contextHolder] = message.useMessage()
 
   const { wallet } = ethos.useWallet();
   const accountModule = useSelector(state => state.accountModule)
   const account = accountModule.account;
+  const address = accountModule.address;
   const [tabActive, setTabActive] = useState('active')
   const priceMap = useSelector(state => state.wsModule.wsPrice)
 
@@ -23,7 +23,6 @@ function Positions() {
   const historyPositions = positionsModule.historyPositions;
   const activeTradePair = useSelector(state => state.activeTradePair);
   const wsPositionUpdateData = positionsModule.wsPositionUpdateData;
-  console.log('wsPositionUpdateData', wsPositionUpdateData)
   const dispatch = useDispatch();
 
 
@@ -32,13 +31,20 @@ function Positions() {
       title: 'Order',
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.order - b.order,
-      key: 'order',
-      dataIndex: 'symbol_short',
-      width: 152
+      key: 'active-order',
+      width: 152,
+      render: (_, record) => (
+        <Space>
+          <div className='mui-fl-vert positions-order'>
+            <img src={record.icon}  alt='asd'/>
+            <span>{record.symbol_short}</span>
+          </div>
+        </Space>
+      ),
     },
     {
       title: 'Type',
-      key: 'type',
+      key: 'active-type',
       width: 108,
       render: (_, record) => (
           <p className={record.direction.toLocaleUpperCase() === 'BUY' ? 'green' : 'red'}>{ (record.direction).toLocaleUpperCase() }</p>
@@ -47,12 +53,12 @@ function Positions() {
     {
       title: 'Size',
       dataIndex: 'lot',
-      key: 'size',
+      key: 'active-size',
       width: 108
     },
     {
       title: 'Leverage',
-      key: 'leverage',
+      key: 'active-leverage',
       width: 108,
       render: (_, record) => (
           <p className='position-leverage'>{ record.leverageFormat }</p>
@@ -61,12 +67,12 @@ function Positions() {
     {
       title: 'Open',
       dataIndex: 'open_price',
-      key: 'open',
+      key: 'active-open',
       width: 152
     },
     {
       title: 'Latest',
-      key: 'latest',
+      key: 'active-latest',
       width: 152,
       render: (_, record) => (
           <p>{ priceMap && priceMap[record.symbol]?.current_price }</p>
@@ -74,12 +80,12 @@ function Positions() {
     },
     {
       title: 'Profit',
-      key: 'profit',
+      key: 'active-profit',
       width: 152,
       render: (_, record) => (
         <Space>
           <p className={wsPositionUpdateData && wsPositionUpdateData?.[record.id] > 0 ? 'green' : 'red'}>
-            { formatNum(wsPositionUpdateData?.[record.id], '$') }
+            { formatNum((wsPositionUpdateData?.[record.id]) || 0, '$') }
           </p>
         </Space>
       ),
@@ -87,12 +93,12 @@ function Positions() {
     {
       title: 'Margin',
       dataIndex: 'margin',
-      key: 'margin',
+      key: 'active-margin',
       width: 110
     },
     {
       title: 'Action',
-      key: 'action',
+      key: 'active-action',
       width: 152,
       render: (_, record) => (
         <div className='mui-fl-vert'>
@@ -110,13 +116,20 @@ function Positions() {
       title: 'Order',
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.order - b.order,
-      key: 'order',
-      dataIndex: 'symbol_short',
-      width: 200
+      key: 'history-order',
+      width: 200,
+      render: (_, record) => (
+        <Space>
+          <div className='mui-fl-vert positions-order'>
+            <img src={record.icon}  alt='asd'/>
+            <span>{record.symbol_short}</span>
+          </div>
+        </Space>
+      ),
     },
     {
       title: 'Type',
-      key: 'type',
+      key: 'history-type',
       width: 200,
       render: (_, record) => (
           <p className={record.direction.toLocaleUpperCase() === 'BUY' ? 'green' : 'red'}>{ (record.direction).toLocaleUpperCase() }</p>
@@ -125,21 +138,27 @@ function Positions() {
     {
       title: 'Size',
       dataIndex: 'lot',
-      key: 'size',
+      key: 'history-size',
       width: 200
     },
     {
       title: 'Leverage',
-      key: 'leverage',
+      key: 'history-leverage',
       width: 200,
       render: (_, record) => (
           <p className='position-leverage'>{ record.leverageFormat }</p>
       )
     },
     {
+      title: 'Open',
+      dataIndex: 'open_price',
+      key: 'history-open_price',
+      width: 200
+    },
+    {
       title: 'Close Price',
       dataIndex: 'close_price',
-      key: 'close',
+      key: 'history-close_price',
       width: 200
     },
     // {
@@ -149,23 +168,25 @@ function Positions() {
     // },
     {
       title: 'Profit',
-      key: 'profit',
+      key: 'history-profit',
       width: 200,
       render: (_, record) => (
-          <p className={record.profit > 0 ? 'green' : 'red'}>{ formatNum(record.profit, '$') }</p>
+          <Space>
+            <p className={record.profit > 0 ? 'green' : 'red'}>{ formatNum(record.profit, '$') }</p>
+          </Space>
       )
     },
     {
       title: 'Status',
-      key: 'margin',
+      key: 'history-status',
       width: 200,
       render: (_, record) => (
         <p>Closed</p>
       ),
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: 'Sui Explorer',
+      key: 'history-action',
       render: (_, record) => (
         <Space size="middle">
           <p className='position-list-icon mui-fl-central taplight' onClick={() => handleHistoryView(record)}>
@@ -180,12 +201,12 @@ function Positions() {
     {
       key: 'active',
       label: `Position`,
-      children: <Table columns={activeColumns} dataSource={activePositions} />,
+      children: <Table columns={activeColumns} dataSource={address ? activePositions : []} />,
     },
     {
       key: 'history',
       label: `History`,
-      children: <Table columns={historyColumns} dataSource={historyPositions} />,
+      children: <Table columns={historyColumns} dataSource={address ? historyPositions : []} />,
     }
   ]
 
