@@ -2,7 +2,7 @@ import { ethos, SignInButton } from "ethos-connect";
 import React, { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom';
 import { Button, message } from 'antd'
-import { getTokenObjectIds, formatAddress } from './../utils/filter'
+import { formatAddress } from './../utils/filter'
 
 import { airdrop } from './../utils/sui'
 import './../assets/css/components/airdrop-content.css'
@@ -45,7 +45,7 @@ function AirdropContent() {
     balanceListRef.current = _balanceList;
   }, [address, scaleBalance, wallet]);
 
-  const balanceList = balanceListRef.current;
+  // const balanceList = balanceListRef.current;
 
   const claimSUI = async () => {
     if (!wallet) return;

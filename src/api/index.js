@@ -4,8 +4,7 @@
 import axios from "axios";
 
 axios.defaults.timeout = 100000;
-axios.defaults.baseURL = "https://dev-api.scale.exchange/";
-
+axios.defaults.baseURL = "https://test-api.scale.exchange/";
 /**
  * http request 拦截器
  */

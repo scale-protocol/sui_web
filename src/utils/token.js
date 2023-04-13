@@ -1,36 +1,39 @@
 // export const NETWORK = 'https://explorer-rpc.devnet.sui.io'
-export const NETWORK = 'https://wallet-rpc.devnet.sui.io'
+// export const NETWORK = 'https://wallet-rpc.devnet.sui.io'
 // export const NETWORK = 'https://fullnode.devnet.sui.io'
+
+export const NETWORK = 'https://wallet-rpc.testnet.sui.io'
+
 
 
 // 带有_COIN的是关于代币 Scale 币的参数，不带的是关于合约的参数
 
 // Scale coin
-export const CONIN_PACKAGE_OBJECTID = '0xc8d5e09170d990d9c0fa4885be0f1fc891b3ad0b886945b46d783cf476425c81'
+export const CONIN_PACKAGE_OBJECTID = '0x2312955c35acc8a73aef16cdf541b33fa027fe3cfba6a01d297c572449e9cdb5'
 export const CONIN_MODULE = 'scale'
-export const CONIN_ADMIN_CAP = '0xa6493a5876706e9d3f740757b55479855e6cee3430bb680e16556b650d0f58b0'
-export const CONIN_RESERVE = '0xb41599b87525acc85a22dcead87610415c9db26600f558c25444c2be356b98d7'
+export const CONIN_ADMIN_CAP = '0x05942e157e0f715d405afcfee5c0f9cf9b090cd606107baa310d0615f968ff31'
+export const CONIN_RESERVE = '0x8f7f2a6fb357b7b07fe43e3242e28611f4240f24a85b7fba3464ff2efc037d38'
 
 // Scale 主合约
-export const PACKAGE_OBJECTID = '0xe206ea2b6a8cd8dd024b9cf7785884eb69cffbca7da4aef82eff21820ef3e5b1'
+export const PACKAGE_OBJECTID = '0xa186facfc7cdb2a90048518789c3fb59ca799923ccbf94bc6fbae01a919a0194'
 export const MODULE = 'enter'
-export const ADMIN_CAP = '0xae1e770da2b424480237c9115131ec06787cfb51b2a7cefe777195af7ad78ceb'
-export const SCALE_NFT_FACTORY = '0x10f58de736d53155a5f39261583faf48343a29adbde9fa8ce59d4ba84688de03'
-export const MARKET_LIST = '0xe85576bfef3c9238a12c669392c5a186061bfb9d33254d4a2b6ea0ec2353ab67'
+export const ADMIN_CAP = '0x2b22cbd8b65aa6a7f33f4dfb2bb0b98b9e327f8a2b8e4cee354d88341bdd457b'
+export const SCALE_NFT_FACTORY = '0x6fe4bbc4dc008f07cacabbbe51c4a468ef59ad2a27b90ad9a56ec52bf98f3c3c'
+export const MARKET_LIST = '0xd273856fb0253c2000c119c6ea8db7605005184e59514262f2e3cd2cb7e2bb62'
 
 export const MARKET = '0x06f1a7b6abfddea3fd67d47346998282dc3202322b2350b188a680d519ba3018'  // 需要从 market 列表里面拿，不能写死哦~
 export const TYPE = {
-  P: '0xe206ea2b6a8cd8dd024b9cf7785884eb69cffbca7da4aef82eff21820ef3e5b1::pool::Scale',
-  T: '0xc8d5e09170d990d9c0fa4885be0f1fc891b3ad0b886945b46d783cf476425c81::scale::SCALE'
+  P: '0xa186facfc7cdb2a90048518789c3fb59ca799923ccbf94bc6fbae01a919a0194::pool::Scale',
+  T: '0x2312955c35acc8a73aef16cdf541b33fa027fe3cfba6a01d297c572449e9cdb5::scale::SCALE'
 }
 
 
 // scale oracle 临时报价服务
-export const ORACLE_PACKAGE_OBJECTID = '0xc7e8da605ccdf533b26cd7aa92fc52a7aadb1a8b950f86214699004fea98a022'
+export const ORACLE_PACKAGE_OBJECTID = '0x95411f388239f12c4b26ab3ba2d8a2656c1e79d97e68b68103de3e0c85404d8b'
 export const ORACLE_MODULE = 'oracle'
 
-export const ORACLE_ADMIN_CAP = '0x15bdc180dd325c27a931aa651e06aba2b54fabc523f3eaf09c027c6325bbcf54'
-export const ORACLE_ROOT = '0xaa74dc51f8bee73e6f414935800655cdfa24d9051d0b6df849085e9f35990600'
+export const ORACLE_ADMIN_CAP = '0x6420bfd7bc8bc47ee5bae9cc4d87363aa5e77fb61a89f30efeae77029dcc7520'
+export const ORACLE_ROOT = '0x4b4ce2e51e98346d8f2484acaccefb2492d682c484c7a40397accdd88cf8ce6d'
 
 // NFT 合约
 export const NFT_PACKAGE = '0x851350adc7584705d43a2e5e902dd299e514da1f1074cc02553a462da4a0c567'
