@@ -49,7 +49,6 @@ function TradeForm() {
       //   type: 'success',
       //   content: 'Open Position Successful!'
       // })
-      form.resetFields()
       setIsModalOpen(true)
       setTimeout(() => {
         getPositionsListFun('active', account, dispatch)
@@ -83,6 +82,7 @@ function TradeForm() {
 
   const handleOk = () => {
     setIsModalOpen(false)
+    form.resetFields()
   }
 
   useEffect(() => {
@@ -132,11 +132,11 @@ function TradeForm() {
           {address ? 
           <div className='mui-fl-vert trade-form-btns'>
             <Button className='trade-form-btn red-bg' disabled={btnDisabled} type="primary" htmlType="button" onClick={() =>handleClkTrade('sell')}>
-              Sell <br></br> { addPosNeg(new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).minus(new BigNumber(halfSpread)).toString(10), false, activeTradePair?.point || 2) }
+              Short <br></br> { addPosNeg(new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).minus(new BigNumber(halfSpread)).toString(10), false, activeTradePair?.point || 2) }
             </Button>
             <p className='trade-form-rate'>{ spreadMap && Math.ceil(spreadMap[activeTradePair?.id]?.spread) }</p>
             <Button className='trade-form-btn green-bg' disabled={btnDisabled} type="primary" htmlType="button" onClick={() => handleClkTrade('buy')}>
-              Buy <br></br> { addPosNeg(new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).plus(new BigNumber(halfSpread)).toString(10), false, activeTradePair?.point || 2) }
+              Long <br></br> { addPosNeg(new BigNumber(priceMap && priceMap[activeTradePair.symbol]?.current_price).plus(new BigNumber(halfSpread)).toString(10), false, activeTradePair?.point || 2) }
             </Button>
           </div>
           :
@@ -158,7 +158,7 @@ function TradeForm() {
           <p className='pair mui-fl-vert'>
             <img src={activeTradePair?.icon} alt='' />
             <span className='s1'>{ activeTradePair?.symbol_short }</span>
-            <span className={`s2 ${tradeType}`}>{ tradeType.toLocaleUpperCase() }</span>
+            <span className={`s2 ${tradeType}`}>{ tradeType.toLocaleUpperCase() === 'BUY' ? 'LONG' : 'SHORT' }</span>
           </p>
           <ul className='mui-fl-vert'>
             <li className='mui-fl-1'>

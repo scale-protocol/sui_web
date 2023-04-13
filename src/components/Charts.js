@@ -9,7 +9,7 @@ import API from './../api/api'
 import './../assets/css/components/charts.css'
 import candleImg from './../assets/img/candle.png'
 import areaLineImg from './../assets/img/areaLine.png'
-import { formatNum, formatTenDecimalNum } from './../utils/filter'
+import { formatNum, formatTenDecimalNum, addPosNeg } from './../utils/filter'
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -145,15 +145,15 @@ function Charts() {
             </li>
             <li>
               <p>24H Change</p>
-              <p className={priceMap ? (priceMap && priceMap[activeTradePair.symbol]?.change > 0 ? 'green' : 'red') : ''}>{ priceMap && priceMap[activeTradePair.symbol]?.change ? formatNum((priceMap && priceMap[activeTradePair.symbol]?.change) || 0, '$') : '--'}</p>
+              <p className={priceMap ? (priceMap && priceMap[activeTradePair.symbol]?.change > 0 ? 'green' : 'red') : ''}>{ priceMap && priceMap[activeTradePair.symbol]?.change ? formatNum(addPosNeg(priceMap && priceMap[activeTradePair.symbol]?.change, false, activeTradePair.point) || 0, '$') : '--'}</p>
             </li>
             <li>
               <p>24H High</p>
-              <p>{priceMap && priceMap[activeTradePair.symbol]?.high_24h}</p>
+              <p>{priceMap && new BigNumber(addPosNeg(priceMap[activeTradePair.symbol]?.high_24h, false, activeTradePair.point)).toFormat()}</p>
             </li>
             <li>
               <p>24H Low</p>
-              <p>{priceMap && priceMap[activeTradePair.symbol]?.low_24h}</p>
+              <p>{priceMap && new BigNumber(addPosNeg(priceMap[activeTradePair.symbol]?.low_24h, false, activeTradePair.point)).toFormat()}</p>
             </li>
           </ul>
         </div>

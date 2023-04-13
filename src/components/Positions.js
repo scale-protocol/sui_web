@@ -47,7 +47,7 @@ function Positions() {
       key: 'active-type',
       width: 108,
       render: (_, record) => (
-          <p className={record.direction.toLocaleUpperCase() === 'BUY' ? 'green' : 'red'}>{ (record.direction).toLocaleUpperCase() }</p>
+          <p className={record.direction.toLocaleUpperCase() === 'BUY' ? 'green' : 'red'}>{ (record.direction).toLocaleUpperCase() === 'BUY' ? 'SHORT' : 'LONG' }</p>
       ),
     },
     {
@@ -132,7 +132,7 @@ function Positions() {
       key: 'history-type',
       width: 200,
       render: (_, record) => (
-          <p className={record.direction.toLocaleUpperCase() === 'BUY' ? 'green' : 'red'}>{ (record.direction).toLocaleUpperCase() }</p>
+          <p className={record.direction.toLocaleUpperCase() === 'BUY' ? 'green' : 'red'}>{ (record.direction).toLocaleUpperCase() === 'BUY' ? 'LONG' : 'SHORT' }</p>
       ),
     },
     {

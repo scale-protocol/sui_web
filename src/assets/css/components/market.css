@@ -11,7 +11,9 @@
   margin-bottom: 20px;
   position: relative;
 }
-
+.market.active {
+  box-shadow: 0px 4px 16px rgba(11, 75, 82, 0.2);
+}
 .market.active::after {
   content: '';
   width: 10px;
