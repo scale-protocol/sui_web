@@ -1,8 +1,8 @@
 // export const NETWORK = 'https://explorer-rpc.devnet.sui.io'
-// export const NETWORK = 'https://wallet-rpc.devnet.sui.io'
+export const NETWORK = 'https://wallet-rpc.devnet.sui.io'
 // export const NETWORK = 'https://fullnode.devnet.sui.io'
 
-export const NETWORK = 'https://wallet-rpc.testnet.sui.io'
+// export const NETWORK = 'https://wallet-rpc.testnet.sui.io'
 
 
 
