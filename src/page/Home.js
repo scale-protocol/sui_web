@@ -26,7 +26,7 @@ function Home() {
   const activeTradePair = useSelector(state => state.activeTradePair);
 
   document.title = (priceMap && priceMap[activeTradePair.symbol] && `${priceMap[activeTradePair.symbol].current_price} | ${activeTradePair.symbol_short} | Scale`) || 'Scale'
-  const [wsUrl, setWsUrl] = useState('wss://dev-api.scale.exchange/ws?account=');
+  const [wsUrl, setWsUrl] = useState('wss://api.scale.exchange/ws?account=');
   const wsRef = useRef(null);
   const [connected, setConnected] = useState(false)
 
@@ -85,10 +85,10 @@ function Home() {
       }
       
       if (account && userInfo && activePositions && wsRef.current) {
-        if (wsUrl !== `wss://dev-api.scale.exchange/ws?account=${account}`) {
+        if (wsUrl !== `wss://api.scale.exchange/ws?account=${account}`) {
             wsRef.current.close()
             wsRef.current = null;
-            setWsUrl(`wss://dev-api.scale.exchange/ws?account=${account}`)
+            setWsUrl(`wss://api.scale.exchange/ws?account=${account}`)
         }
       }
 
