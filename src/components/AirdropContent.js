@@ -145,12 +145,12 @@ function AirdropContent() {
             <li className='mui-fl-col mui-fl-btw'>
               <p>After Connect your wallet, please claim your test tokens to participate in the event</p>
               <div className="mui-fl-vert">
-                <Button size='large' shape="round" disabled={step === 1} type="primary" className='mui-shr-0 sty-airdrop-button mui-fl-central claim-sui' loading={suiBtnLoading} onClick={claimSUI}>
+                {/* <Button size='large' shape="round" disabled={step === 1} type="primary" className='mui-shr-0 sty-airdrop-button mui-fl-central claim-sui' loading={suiBtnLoading} onClick={claimSUI}>
                   <span className="mui-fl-central">
                     <i className="mico-sui"></i>
                     Claim SUI(test)
                   </span>
-                </Button>
+                </Button> */}
                 <Button size='large' shape="round" disabled={step === 1} type="primary" className='mui-shr-0 sty-airdrop-button mui-fl-central claim-scale' loading={btnLoading} onClick={claimScale}>
                   <span className="mui-fl-central">
                     <i className="mico-scale"></i>
