@@ -14,10 +14,10 @@ import './../assets/css/components/header.css'
 
 const BN = BigNumber.clone({ ROUNDING_MODE: 1, DECIMAL_PLACES: 9 })
 const BIG_TEN = new BigNumber(10)
-
 function Header() {
   const [messageApi, contextHolder] = message.useMessage()
   const { status, wallet, provider } = ethos.useWallet();
+  // console.log('wallet', wallet)
   const dispatch = useDispatch();
 
   const accountModule = useSelector(state => state.accountModule)
@@ -31,6 +31,7 @@ function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalActive, setModalActive] = useState('')
   const [inputValue, setInputValue] = useState('');
+  const [isAirdropModalOpen, setIsAirdropModalOpen] = useState(false);
 
 
   const createAccountFun = useCallback(async () => {
@@ -46,13 +47,14 @@ function Header() {
     }
     const scaleObjectIds = getTokenObjectIds(storeBalanceList || '[]', 'SCALE')
     if (scaleObjectIds.length === 0) {
-      messageApi.open({
-        type: 'warning',
-        content: 'you need Sui Token to creat your margin account',
-        style: {
-          marginTop: 77
-        }
-      })
+      // messageApi.open({
+      //   type: 'warning',
+      //   content: 'you need Scale test token',
+      //   style: {
+      //     marginTop: 77
+      //   }
+      // })
+      setIsAirdropModalOpen(true)
       return
     }
 
@@ -331,6 +333,10 @@ function Header() {
         <div className="header-modal-balance">
           {modalActive === 'deposit' ? `Your wallet: $${scaleBalance}` : `Your balance: $${userInfo?.balance}`}
         </div>
+      </Modal>
+
+      <Modal open={isAirdropModalOpen} title="Warning" className="sty2-modal" onOk={() => setIsAirdropModalOpen(false)} onCancel={() => setIsAirdropModalOpen(false)}>
+        You need testUSD，please claim at <a href="/airdrop">{ window.location.origin + '/airdrop' }</a>
       </Modal>
     </div>
     </>

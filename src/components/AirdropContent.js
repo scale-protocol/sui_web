@@ -151,7 +151,7 @@ function AirdropContent() {
                     Claim SUI(test)
                   </span>
                 </Button> */}
-                <Button size='large' shape="round" disabled={step === 1} type="primary" className='mui-shr-0 sty-airdrop-button mui-fl-central claim-scale' loading={btnLoading} onClick={claimScale}>
+                <Button size='large' shape="round" disabled={step === 1} type="primary" className='mui-shr-0 sty-airdrop-button mui-fl-central' loading={btnLoading} onClick={claimScale}>
                   <span className="mui-fl-central">
                     <i className="mico-scale"></i>
                     Claim Scale

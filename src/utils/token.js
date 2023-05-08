@@ -15,7 +15,8 @@ export const CONIN_ADMIN_CAP = '0xc0ef05c5e06fe088032d9cbaea1e19b16b848ff488243f
 export const CONIN_RESERVE = '0xfdb87fbc5299b768e29770e117af06646f72abf2a0fe40937d03238a8f08038f'
 
 // Scale 主合约
-export const PACKAGE_OBJECTID = '0x001f72073dcdc4425ba0e2b94ba0f02545b66da058b293cae695ee36e5d4a1ae'
+// export const PACKAGE_OBJECTID = '0x001f72073dcdc4425ba0e2b94ba0f02545b66da058b293cae695ee36e5d4a1ae'
+export const PACKAGE_OBJECTID = '0x1f72073dcdc4425ba0e2b94ba0f02545b66da058b293cae695ee36e5d4a1ae'
 export const MODULE = 'enter'
 export const ADMIN_CAP = '0xa58b8e509daeb428e67ff164c6bcebbef9dd0869591825e0276867551cd301f1'
 export const SCALE_NFT_FACTORY = '0x4660f1075e64aa08fa6665e4ace9022bf6d61c0f5c18c2f48258f93c5be4f658'

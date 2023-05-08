@@ -21,3 +21,7 @@
     position: relative;
     z-index: 1;
 }
+
+.ant-modal.sty2-modal .ant-modal-title {
+    color: #e6a23c;
+}
