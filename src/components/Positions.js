@@ -256,7 +256,7 @@ function Positions() {
   }, [account, activeTradePair?.id, dispatch, messageApi, wallet])
 
   const handleHistoryView = useCallback((record) => {
-    window.open(`https://explorer.sui.io/object/${record.id}?network=devnet`)
+    window.open(`https://explorer.sui.io/object/${record.id}?network=mainnet`)
   }, [])
   
   useEffect(() => {

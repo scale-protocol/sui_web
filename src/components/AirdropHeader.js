@@ -1,4 +1,4 @@
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './../assets/css/components/header.css'
 
 function AirdropHeader() {
@@ -6,9 +6,9 @@ function AirdropHeader() {
     <div className="mui-header">
       <div className="section mui-fl-vert mui-fl-btw">
         <div className="mui-fl-vert">
-        {/* <Link to="/"> */}
+        <Link to="/">
           <p className="logo"></p>
-        {/* </Link> */}
+        </Link>
         </div>
       </div>
     </div>

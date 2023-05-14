@@ -17,7 +17,7 @@ const BIG_TEN = new BigNumber(10)
 function Header() {
   const [messageApi, contextHolder] = message.useMessage()
   const { status, wallet, provider } = ethos.useWallet();
-  // console.log('wallet', wallet)
+  console.log('wallet', wallet)
   const dispatch = useDispatch();
 
   const accountModule = useSelector(state => state.accountModule)
@@ -67,6 +67,16 @@ function Header() {
           marginTop: 77
         }
       })
+      console.log('wallet', wallet)
+      setTimeout(() => {
+        const { objects } = wallet?.contents || { objects: [] }
+        objects.forEach((v) => {
+          if (v.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
+            dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
+          }
+        })
+        console.log('wallet', wallet)
+      }, 2000)
     } else {
       messageApi.open({
         type: 'warning',
@@ -225,13 +235,13 @@ function Header() {
   };
 
   const openModal = useCallback((type) => {
-    if (type === 'deposit' && !account) {
+    if (type === 'create') {
       createAccountFun()
     } else {
       setIsModalOpen(() => true)
       setModalActive(() => type)
     }
-  }, [account, createAccountFun])
+  }, [createAccountFun])
 
   const handleInput = (e) => {
     let value = e.target.value;
@@ -288,9 +298,10 @@ function Header() {
                 </li>
               </ul>
               <div className="btns mui-fl-vert">
-                <p className="taplight2" onClick={() => openModal('deposit')}>Deposit</p>
-                <p></p>
-                <p className="taplight2" onClick={() => openModal('withdraw')}>Withdraw</p>
+                { wallet && account ? (
+                  <><p className="taplight2" onClick={() => openModal('deposit')}>Deposit</p><p></p><p className="taplight2" onClick={() => openModal('withdraw')}>Withdraw</p></>
+                ) : 
+                <p className="taplight2" onClick={() => openModal('create')}>Create account</p>}
               </div>
             </div>
           }
