@@ -1,12 +1,15 @@
 import BigNumber from 'bignumber.js'
 import { useDispatch, useSelector } from 'react-redux';
 import { ethos, SignInButton } from "ethos-connect";
-import { formatTenDecimalNum, keepDecimal2, addPosNeg } from './../utils/filter'
-import { openPosition } from './../utils/sui'
+import { getTokenObjectIds, formatAddress, formatTenDecimalNum, keepDecimal2, addPosNeg } from './../utils/filter'
+import { openPosition, createAccount } from './../utils/sui'
 import { getPositionsListFun } from './../utils/positions'
 import { Button, Form, InputNumber, message, Modal } from 'antd';
 import './../assets/css/components/trade-form.css'
 import { useEffect, useState } from 'react';
+import warningImg from './../assets/img/warning.png'
+import { PACKAGE_OBJECTID } from './../utils/token'
+import { setAccount } from './../store/action'
 
 function TradeForm() {
   const { wallet } = ethos.useWallet();
@@ -21,6 +24,9 @@ function TradeForm() {
   const spreadMap = useSelector(state => state.spreadModule.spreadMap)
   const halfSpread = spreadMap && (new BigNumber(spreadMap[activeTradePair?.id]?.spread).dividedBy(2))
 
+  const accountModule = useSelector(state => state.accountModule)
+  const storeBalanceList = accountModule.balanceList;
+
   const dispatch = useDispatch();
   const [margin, setMargin] = useState('0.00')
   const [spread, setSpread] = useState(0)
@@ -28,16 +34,13 @@ function TradeForm() {
 
   const [btnDisabled, setBtnDisabled] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  
+  const [isAirdropModalOpen, setIsAirdropModalOpen] = useState(false);
 
   const handleClkTrade = async (type) => {
     if (!account) {
-      messageApi.open({
-        type: 'warning',
-        content: 'you need Sui Token to creat your margin account!',
-        style: {
-          marginTop: 77
-        }
-      })
+      setIsCreateModalOpen(true)
       return
     }
     setTradeType(type)
@@ -67,6 +70,7 @@ function TradeForm() {
 
   const handleIpt = () => {
     const values = form.getFieldsValue();
+    
     if (values.size && values.leverage) {
       const _margin = keepDecimal2(new BigNumber(values.size).times(new BigNumber(priceMap[activeTradePair.symbol]?.current_price)).dividedBy(new BigNumber(values.leverage))).toString(10)
       const _spread = keepDecimal2(new BigNumber(values.size).times(new BigNumber(halfSpread)).dividedBy(values.leverage)).toString(10)
@@ -83,6 +87,64 @@ function TradeForm() {
   const handleOk = () => {
     setIsModalOpen(false)
     form.resetFields()
+  }
+
+  const handleCreateOk = async () => {
+    if (storeBalanceList.length === 0) {
+      messageApi.open({
+        type: 'warning',
+        content: 'you need Sui Token to creat your margin account',
+        style: {
+          marginTop: 77
+        }
+      })
+      return
+    }
+    const scaleObjectIds = getTokenObjectIds(storeBalanceList || '[]', 'SCALE')
+    if (scaleObjectIds.length === 0) {
+      // messageApi.open({
+      //   type: 'warning',
+      //   content: 'you need Scale test token',
+      //   style: {
+      //     marginTop: 77
+      //   }
+      // })
+      setIsAirdropModalOpen(true)
+      return
+    }
+    const rp = await createAccount(wallet, scaleObjectIds[0])
+    if (rp.confirmedLocalExecution) {
+      messageApi.open({
+        type: 'success',
+        content: 'Create Account Successful!',
+        style: {
+          marginTop: 77
+        }
+      })
+      // console.log('wallet', wallet)
+      setTimeout(() => {
+        const { objects } = wallet?.contents || { objects: [] }
+        objects.forEach((v) => {
+          if (v.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
+            dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
+          }
+        })
+        // console.log('wallet', wallet)
+        setIsCreateModalOpen(false)
+      }, 2000)
+    } else {
+      messageApi.open({
+        type: 'warning',
+        content: 'Create Account fail, Please try again later',
+        style: {
+          marginTop: 77
+        }
+      })
+    }
+  }
+
+  const handleCreateCancel = () => {
+    setIsCreateModalOpen(false)
   }
 
   useEffect(() => {
@@ -186,6 +248,24 @@ function TradeForm() {
         </Button>
       </div>
     </Modal>
+
+    <Modal className="sty1-modal header-modal" centered width={386} okText='Create Now' open={isCreateModalOpen}  footer={
+      <div className='mui-fl-central'>
+        <Button className='positions-btn1' shape="round" onClick={handleCreateCancel}>Cancel</Button>
+        <Button className='positions-btn2' shape="round" type="primary" onClick={handleCreateOk}>Create Now</Button>
+      </div>} onOk={handleCreateOk} onCancel={handleCreateCancel}>
+      <div className='trade-create-now mui-fl-col mui-fl-vert'>
+        <img src={warningImg} alt='' />
+        <p className='title'>Create account to trading</p>
+        <p className='tip1'>No margin account has been created with Wallet {formatAddress(address)}. </p>
+        <p className='tip1'>You can create now and start trading.</p>
+      </div>
+      </Modal>
+
+      
+      <Modal open={isAirdropModalOpen} title="Warning" className="sty2-modal" onOk={() => setIsAirdropModalOpen(false)} onCancel={() => setIsAirdropModalOpen(false)}>
+          You need testUSD，please claim at <a href="/airdrop">{window.location.origin + '/airdrop'}</a>
+        </Modal>
     </>
   )
 }

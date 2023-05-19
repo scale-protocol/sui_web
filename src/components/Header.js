@@ -7,7 +7,7 @@ import { JsonRpcProvider } from '@mysten/sui.js'
 
 import API from "../api/api";
 import { setAccount, setAddress, setWallet, setBalanceList, setProvider, setUserInfo } from './../store/action'
-import { formatAddress, getTokenObjectIds,  keepDecimal2, formatNum } from './../utils/filter'
+import { formatAddress, getTokenObjectIds, keepDecimal2, formatNum } from './../utils/filter'
 import { PACKAGE_OBJECTID } from './../utils/token'
 import { deposit, withdraw, createAccount } from './../utils/sui'
 import './../assets/css/components/header.css'
@@ -17,7 +17,7 @@ const BIG_TEN = new BigNumber(10)
 function Header() {
   const [messageApi, contextHolder] = message.useMessage()
   const { status, wallet, provider } = ethos.useWallet();
-  console.log('wallet', wallet)
+  // console.log('wallet', wallet)
   const dispatch = useDispatch();
 
   const accountModule = useSelector(state => state.accountModule)
@@ -67,7 +67,7 @@ function Header() {
           marginTop: 77
         }
       })
-      console.log('wallet', wallet)
+      // console.log('wallet', wallet)
       setTimeout(() => {
         const { objects } = wallet?.contents || { objects: [] }
         objects.forEach((v) => {
@@ -75,7 +75,7 @@ function Header() {
             dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
           }
         })
-        console.log('wallet', wallet)
+        // console.log('wallet', wallet)
       }, 2000)
     } else {
       messageApi.open({
@@ -101,11 +101,11 @@ function Header() {
           dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
         }
       })
-      
+
       // if (!account) {
       //   createAccountFun()
       // }
-      
+
       // 存储 balanceList
       const balanceList = []
       const { tokens } = wallet?.contents || { tokens: {} }
@@ -143,8 +143,8 @@ function Header() {
         })
       })
     }
-    
-    
+
+
     if (account) {
       API.getAccountInfo(account).then(result => {
         // result.data.margin_total = keepDecimal2((new BigNumber(result.data.margin_total).times(formatTenDecimalNum(-6))).toString(10))
@@ -228,7 +228,7 @@ function Header() {
     setIsModalOpen(false);
     setInputValue('')
   };
-  
+
   const handleCancel = () => {
     setIsModalOpen(false);
     setInputValue('')
@@ -265,91 +265,97 @@ function Header() {
       <p className="taplight2" onClick={() => handleLogOut()}>Log out</p>
     </div>
   );
-  
+
   return (
     <>
-    {contextHolder}
-    <div className="mui-header">
-      <div className="section mui-fl-vert mui-fl-btw">
-        <div className="mui-fl-vert">
-          <p className="logo"></p>
-          {address &&
-            <div className="account-info mui-fl-vert">
-              <p className="title mui-fl-vert taplight2">
-                <span>Account</span>
-                <i className="mico-arrow-right" />
-              </p>
-              <ul className="info mui-fl-vert">
-                <li>
-                  <p>Balance</p>
-                  <p>$ {userInfo? userInfo.balance : '--'}</p>
-                </li>
-                <li>
-                  <p>Margin</p>
-                  <p>$ {userInfo? userInfo?.margin_total : '--'}</p>
-                </li>
-                <li>
-                  <p>Margin Level</p>
-                  <p>{userInfo && userInfo?.margin_percentage ? formatNum((userInfo?.margin_percentage || 0)) + '%' : '--'}</p>
-                </li>
-                <li className="condition mui-fl-vert">
-                  <i className="mico-success"></i>
-                  <span>Good Condition</span>
-                </li>
-              </ul>
-              <div className="btns mui-fl-vert">
-                { wallet && account ? (
-                  <><p className="taplight2" onClick={() => openModal('deposit')}>Deposit</p><p></p><p className="taplight2" onClick={() => openModal('withdraw')}>Withdraw</p></>
-                ) : 
-                <p className="taplight2" onClick={() => openModal('create')}>Create account</p>}
+      {contextHolder}
+      <div className="mui-header">
+        <div className="section mui-fl-vert mui-fl-btw">
+          <div className="mui-fl-vert">
+            <p className="logo"></p>
+            {address &&
+              <div className="account-info mui-fl-vert">
+                {account ?
+                  <>
+                    <p className="title mui-fl-vert taplight2">
+                      <span>Account</span>
+                      <i className="mico-arrow-right" />
+                    </p>
+                    <ul className="info mui-fl-vert">
+                      <li>
+                        <p>Balance</p>
+                        <p>$ {userInfo ? userInfo.balance : '--'}</p>
+                      </li>
+                      <li>
+                        <p>Margin</p>
+                        <p>$ {userInfo ? userInfo?.margin_total : '--'}</p>
+                      </li>
+                      <li>
+                        <p>Margin Level</p>
+                        <p>{userInfo && userInfo?.margin_percentage ? formatNum((userInfo?.margin_percentage || 0)) + '%' : '--'}</p>
+                      </li>
+                      <li className="condition mui-fl-vert">
+                        <i className="mico-success"></i>
+                        <span>Good Condition</span>
+                      </li>
+                    </ul>
+                    <div className="btns mui-fl-vert">
+                      <p className="taplight2" onClick={() => openModal('deposit')}>Deposit</p><p></p><p className="taplight2" onClick={() => openModal('withdraw')}>Withdraw</p>
+                    </div>
+                  </>
+                  :
+                  <div className="mui-fl-vert header-no-account">
+                    <p>Create account with {formatAddress(address)} to start trading</p>
+                    <p className="taplight2" onClick={() => openModal('create')}>Create Now</p>
+                  </div>
+                }
               </div>
-            </div>
-          }
-        </div>
+            }
+          </div>
 
-        <div className="mui-fl-vert">
-          {/* <div className="global mui-fl-vert">
+          <div className="mui-fl-vert">
+            {/* <div className="global mui-fl-vert">
             <i className="mico-global"></i>
             <p className="mui-fl-vert taplight2">
               <span>US</span>
               <i className="mico-arrow-right" />
             </p>
           </div> */}
-          <div>
-            {!wallet ? (
-              <SignInButton>
-                <span className="connect-btn mui-fl-vert">
-                  Connect
-                  <i className="mico-arrow-right-white" />
-                </span>
-              </SignInButton>
-            ) : (
-              <Popover placement="bottom" content={content} trigger="click">
-                <div className="connect-btn address-btn mui-fl-vert taplight">
-                  <span>{formatAddress(accountModule.address)}</span>
-                  <i className="mico-arrow-right" />
-                </div>
-              </Popover>
-            )}
+            <div>
+              {!wallet ? (
+                <SignInButton>
+                  <span className="connect-btn mui-fl-vert">
+                    Connect
+                    <i className="mico-arrow-right-white" />
+                  </span>
+                </SignInButton>
+              ) : (
+                <Popover placement="bottom" content={content} trigger="click">
+                  <div className="connect-btn address-btn mui-fl-vert taplight">
+                    <span>{formatAddress(accountModule.address)}</span>
+                    <i className="mico-arrow-right" />
+                  </div>
+                </Popover>
+              )}
+            </div>
           </div>
         </div>
+
+        <Modal className="sty1-modal header-modal" centered width={386} okText='Confirm' title={modalActive === 'deposit' ? 'Deposit Margin' : 'Withdraw Margin'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+          <p className="p1">
+            {modalActive === 'deposit' ? 'From Wallet: ' : 'To Wallet: '}
+            <span>{formatAddress(address)}</span>
+          </p>
+          <Input value={inputValue} onInput={handleInput} />
+          <div className="header-modal-balance">
+            {modalActive === 'deposit' ? `Your wallet: $${scaleBalance}` : `Your balance: $${userInfo?.balance}`}
+          </div>
+        </Modal>
+
+        <Modal open={isAirdropModalOpen} title="Warning" className="sty2-modal" onOk={() => setIsAirdropModalOpen(false)} onCancel={() => setIsAirdropModalOpen(false)}>
+          You need testUSD，please claim at <a href="/airdrop">{window.location.origin + '/airdrop'}</a>
+        </Modal>
       </div>
-
-      <Modal className="sty1-modal header-modal" centered width={386} okText='Confirm' title={modalActive === 'deposit' ? 'Deposit Margin' : 'Withdraw Margin'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <p className="p1">
-          {modalActive === 'deposit' ? 'From Wallet: ' : 'To Wallet: '}
-          <span>{formatAddress(address)}</span>
-        </p>
-        <Input value={inputValue} onInput={handleInput} />
-        <div className="header-modal-balance">
-          {modalActive === 'deposit' ? `Your wallet: $${scaleBalance}` : `Your balance: $${userInfo?.balance}`}
-        </div>
-      </Modal>
-
-      <Modal open={isAirdropModalOpen} title="Warning" className="sty2-modal" onOk={() => setIsAirdropModalOpen(false)} onCancel={() => setIsAirdropModalOpen(false)}>
-        You need testUSD，please claim at <a href="/airdrop">{ window.location.origin + '/airdrop' }</a>
-      </Modal>
-    </div>
     </>
   );
 }

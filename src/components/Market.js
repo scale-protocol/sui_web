@@ -9,6 +9,7 @@ import './../assets/css/components/market.css'
 
 function Market() {
   const priceMap = useSelector(state => state.wsModule.wsPrice)
+  // console.log('priceMap', priceMap)
   const marketsData = useSelector(state => state.market)
   const dispatch = useDispatch();
   const activeTradePair = useSelector(state => state.activeTradePair);

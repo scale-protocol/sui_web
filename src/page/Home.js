@@ -59,6 +59,7 @@ function Home() {
   
           // 价格更新
           if (event === 'price_update') {
+            // console.log('price-update', data)
             dispatch(setPriceMap(data))
   
             // 账号更新
