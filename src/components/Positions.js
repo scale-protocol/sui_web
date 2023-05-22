@@ -1,7 +1,7 @@
 import { Modal, Button, Space, Table, Tabs, message } from 'antd';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ethos } from "ethos-connect";
+import { useWallet } from "@suiet/wallet-kit";
 import BigNumber from 'bignumber.js'
 
 import { closePosition } from './../utils/sui'
@@ -16,8 +16,9 @@ import closeShort from './../assets/img/close-posotion-bg2.png'
 
 function Positions() {
   const [messageApi, contextHolder] = message.useMessage()
+  const wallet01 = useWallet()
 
-  const { wallet } = ethos.useWallet();
+  // const { wallet } = ethos.useWallet();
   const accountModule = useSelector(state => state.accountModule)
   const account = accountModule.account;
   const address = accountModule.address;
@@ -240,7 +241,7 @@ function Positions() {
 
   const handleActiveClose = useCallback(async (record, price) => {
     try {
-      const rp = await closePosition(wallet, account, record.id, activeTradePair.id)
+      const rp = await closePosition(wallet01, account, record.id, activeTradePair.id)
       if (rp.confirmedLocalExecution) {
         // messageApi.open({
         //   type: 'success',
@@ -286,7 +287,7 @@ function Positions() {
         }
       })
     }
-  }, [account, activeTradePair?.id, dispatch, messageApi, wallet])
+  }, [account, activeTradePair?.id, dispatch, messageApi, wallet01])
 
   const handleHistoryView = useCallback((record) => {
     window.open(`https://explorer.sui.io/object/${record.id}?network=mainnet`)

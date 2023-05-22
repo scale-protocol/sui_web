@@ -17,7 +17,8 @@
 }
 
 .connect-btn {
-  padding: 6px 12px 6px 16px;
+  width: auto !important;
+  padding: 6px 12px 6px 16px !important;
   border-radius: 21px;
   font-family: 'Nunito';
   font-style: normal;
@@ -25,9 +26,13 @@
   line-height: 20px;
   letter-spacing: -0.04em;
   color: #FFFFFF;
-  background-color: #000;
+  background-color: #000 !important;
+  border-radius: 40px !important;
+  height: 32px;
+  box-sizing: border-box;
 }
 .connect-btn.big {
+  width: 100% !important;
   height: 48px;
   border-radius: 31px;
 }
@@ -54,8 +59,8 @@
   right: -16px;
 }
 .address-btn {
-  background: rgba(0, 0, 0, 0.05);
-  color: #000;
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #000 !important;
 }
 
 .account-info {

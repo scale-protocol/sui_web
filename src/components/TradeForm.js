@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useDispatch, useSelector } from 'react-redux';
-import { ethos, SignInButton } from "ethos-connect";
+import { JsonRpcProvider, Connection } from '@mysten/sui.js'
+import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 import { getTokenObjectIds, formatAddress, formatTenDecimalNum, keepDecimal2, addPosNeg } from './../utils/filter'
 import { openPosition, createAccount } from './../utils/sui'
 import { getPositionsListFun } from './../utils/positions'
@@ -12,8 +13,7 @@ import { PACKAGE_OBJECTID } from './../utils/token'
 import { setAccount } from './../store/action'
 
 function TradeForm() {
-  const { wallet } = ethos.useWallet();
-  
+  const wallet01 = useWallet()
   const [messageApi, contextHolder] = message.useMessage()
 
   const [form] = Form.useForm();
@@ -46,7 +46,7 @@ function TradeForm() {
     setTradeType(type)
     const values = form.getFieldsValue();
     const formatSize = (new BigNumber(values.size).times(formatTenDecimalNum(4))).toString(10)
-    const rp = await openPosition(wallet, account, formatSize, values.leverage.toString(), 1, type === 'sell' ? 2 : 1, activeTradePair.id)
+    const rp = await openPosition(wallet01, account, formatSize, values.leverage.toString(), 1, type === 'sell' ? 2 : 1, activeTradePair.id)
     if (rp.confirmedLocalExecution) {
       // messageApi.open({
       //   type: 'success',
@@ -112,7 +112,7 @@ function TradeForm() {
       setIsAirdropModalOpen(true)
       return
     }
-    const rp = await createAccount(wallet, scaleObjectIds[0])
+    const rp = await createAccount(wallet01, scaleObjectIds[0])
     if (rp.confirmedLocalExecution) {
       messageApi.open({
         type: 'success',
@@ -122,16 +122,30 @@ function TradeForm() {
         }
       })
       // console.log('wallet', wallet)
-      setTimeout(() => {
-        const { objects } = wallet?.contents || { objects: [] }
-        objects.forEach((v) => {
-          if (v.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
-            dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
-          }
-        })
-        // console.log('wallet', wallet)
-        setIsCreateModalOpen(false)
-      }, 2000)
+      // setTimeout(() => {
+      //   const { objects } = wallet?.contents || { objects: [] }
+      //   objects.forEach((v) => {
+      //     if (v.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
+      //       dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
+      //     }
+      //   })
+      //   // console.log('wallet', wallet)
+      //   setIsCreateModalOpen(false)
+      // }, 2000)
+      
+      const fullnodeProvider = new JsonRpcProvider(new Connection({
+        fullnode: wallet01.chain.rpcUrl
+      }))
+      // 获取account
+      const { data: objectLists } = await fullnodeProvider.getOwnedObjects({
+        owner: wallet01.address,
+        options: { showType: true, showDisplay: true, showContent: true }
+      })
+      objectLists.forEach(v => {
+        if (v.data.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
+          dispatch(setAccount(v.data.objectId || ''))  // 存 account
+        }
+      })
     } else {
       messageApi.open({
         type: 'warning',
@@ -202,11 +216,11 @@ function TradeForm() {
             </Button>
           </div>
           :
-          <SignInButton>
+          <ConnectButton className="connect-btn big mui-fl-central">
             <span className="connect-btn big mui-fl-central">
               Connect
             </span>
-          </SignInButton>
+          </ConnectButton>
           }
       </Form>
     </div>

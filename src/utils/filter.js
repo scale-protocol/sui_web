@@ -16,9 +16,12 @@ export const formatAddress = (account) => {
  * @param symbol 代币类型
  */
 export const getTokenObjectIds = (balanceList, symbol) => {
+  console.log('balanceList', balanceList)
   const _balanceList = JSON.parse(balanceList) || []
-  const coins = _balanceList.find(v => v.symbol === symbol)?.coins || []
-  const objectIds = Array.from(coins, ({ objectId }) => objectId)
+  const coins = _balanceList.find(v => v.symbol === symbol)?.data || []
+  console.log('coins', coins)
+  const objectIds = Array.from(coins, ({ coinObjectId }) => coinObjectId)
+  console.log('objectIds', objectIds)
   return objectIds
   // return ''
 }

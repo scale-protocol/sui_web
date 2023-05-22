@@ -1,23 +1,27 @@
-import { ethos, SignInButton } from "ethos-connect";
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import BigNumber from 'bignumber.js'
 import { Modal, Input, message, Popover } from 'antd';
-import { JsonRpcProvider } from '@mysten/sui.js'
+import { JsonRpcProvider, Connection } from '@mysten/sui.js'
 
 import API from "../api/api";
 import { setAccount, setAddress, setWallet, setBalanceList, setProvider, setUserInfo } from './../store/action'
 import { formatAddress, getTokenObjectIds, keepDecimal2, formatNum } from './../utils/filter'
-import { PACKAGE_OBJECTID } from './../utils/token'
+import { PACKAGE_OBJECTID, CONIN_PACKAGE_OBJECTID } from './../utils/token'
 import { deposit, withdraw, createAccount } from './../utils/sui'
 import './../assets/css/components/header.css'
+
+import { ConnectButton, useAccountBalance, useWallet, SuiMainnetChain } from "@suiet/wallet-kit";
+import '@suiet/wallet-kit/style.css';
+
 
 const BN = BigNumber.clone({ ROUNDING_MODE: 1, DECIMAL_PLACES: 9 })
 const BIG_TEN = new BigNumber(10)
 function Header() {
+  const wallet01 = useWallet()
+  const { balance } = useAccountBalance()
+
   const [messageApi, contextHolder] = message.useMessage()
-  const { status, wallet, provider } = ethos.useWallet();
-  // console.log('wallet', wallet)
   const dispatch = useDispatch();
 
   const accountModule = useSelector(state => state.accountModule)
@@ -58,7 +62,7 @@ function Header() {
       return
     }
 
-    const rp = await createAccount(wallet, scaleObjectIds[0])
+    const rp = await createAccount(wallet01, scaleObjectIds[0])
     if (rp.confirmedLocalExecution) {
       messageApi.open({
         type: 'success',
@@ -68,15 +72,16 @@ function Header() {
         }
       })
       // console.log('wallet', wallet)
-      setTimeout(() => {
-        const { objects } = wallet?.contents || { objects: [] }
-        objects.forEach((v) => {
-          if (v.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
-            dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
-          }
-        })
-        // console.log('wallet', wallet)
-      }, 2000)
+      // setTimeout(() => {
+      //   const { objects } = wallet?.contents || { objects: [] }
+      //   objects.forEach((v) => {
+      //     if (v.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
+      //       dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
+      //     }
+      //   })
+      //   // console.log('wallet', wallet)
+      // }, 2000)
+      getAccount01()
     } else {
       messageApi.open({
         type: 'warning',
@@ -86,72 +91,146 @@ function Header() {
         }
       })
     }
-  }, [messageApi, storeBalanceList, wallet])
+  }, [messageApi, storeBalanceList])
 
   useEffect(() => {
-    if (wallet && status === 'connected') {
-      dispatch(setAddress(wallet?.address || ''))  // 存 address
-      dispatch(setWallet(JSON.parse(JSON.stringify(wallet) || null)))  // 存 wallet
+    if (wallet01.connected) {
+      if (wallet01.chain.id !== SuiMainnetChain.id) {
+        wallet01.disconnect()
+        messageApi.open({
+          type: 'warning',
+          content: 'Please switch your wallet to mainnet',
+          style: {
+            marginTop: 77
+          }
+        })
+        return
+      }
+      // console.log('wallet01', wallet01)
+      // console.log('SuiMainnetChain', SuiMainnetChain)
+      // if (wallet01.chain.id === )
+      dispatch(setWallet(JSON.parse(JSON.stringify(wallet01) || null)))  // 存 wallet
+      dispatch(setAddress(wallet01?.address || ''))  // 存 address
+      dispatch(setProvider(wallet01.chain.rpcUrl))
+      // console.log('wallet01.chain.rpcUrl', wallet01.chain)
+      // console.log()
+      getBalanceList01()
+      getAccount01()
+    }
 
-      dispatch(setProvider(provider.connection.fullnode || ''))
+    // if (wallet && status === 'connected') {
+      // dispatch(setAddress(wallet?.address || ''))  // 存 address
+      // dispatch(setWallet(JSON.parse(JSON.stringify(wallet) || null)))  // 存 wallet
 
-      const { objects } = wallet?.contents || { objects: [] }
-      objects.forEach((v) => {
-        if (v.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
-          dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
-        }
-      })
+      // dispatch(setProvider(provider.connection.fullnode || ''))
+
+      // const { objects } = wallet?.contents || { objects: [] }
+      // objects.forEach((v) => {
+      //   if (v.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
+      //     dispatch(setAccount(v.extraFields.account_id || ''))  // 存 account
+      //   }
+      // })
 
       // if (!account) {
       //   createAccountFun()
       // }
 
       // 存储 balanceList
-      const balanceList = []
-      const { tokens } = wallet?.contents || { tokens: {} }
-      Object.keys(tokens).forEach(async (v) => {
-        const obj = tokens[v]
-        const symbol = v.substring(v.lastIndexOf(':') + 1)
-        let tokenInfo
-        try {
-          tokenInfo = await (new JsonRpcProvider(providerValue)).getCoinMetadata(v)
-        } catch (e) {
-          // console.log('error', e)
-          tokenInfo = { decimals: 0, symbol }
-        }
-        if (symbol === 'SUI') {
-          balanceList.unshift({
-            symbol,
-            balance: obj.balance.toString(10),
-            formateBalance: new BN(obj.balance.toString(10)).dividedBy(BIG_TEN.pow(tokenInfo.decimals)).toString(10),
-            coins: obj.coins.sort((a, b) => { return b.balance - a.balance })
-          })
-        } else {
-          balanceList.push({
-            symbol,
-            balance: obj.balance.toString(10),
-            formateBalance: new BN(obj.balance.toString(10)).dividedBy(BIG_TEN.pow(symbol === 'SCALE' ? 6 : tokenInfo.decimals)).toString(10),
-            coins: obj.coins.sort((a, b) => { return b.balance - a.balance })
-          })
-        }
-        dispatch(setBalanceList(JSON.stringify(balanceList) || '[]')) // 存 balanceList
+      // const balanceList = []
+      // const { tokens } = wallet?.contents || { tokens: {} }
+      // Object.keys(tokens).forEach(async (v) => {
+      //   const obj = tokens[v]
+      //   const symbol = v.substring(v.lastIndexOf(':') + 1)
+      //   let tokenInfo
+      //   try {
+      //     tokenInfo = await (new JsonRpcProvider(providerValue)).getCoinMetadata(v)
+      //   } catch (e) {
+      //     // console.log('error', e)
+      //     tokenInfo = { decimals: 0, symbol }
+      //   }
+      //   if (symbol === 'SUI') {
+      //     balanceList.unshift({
+      //       symbol,
+      //       balance: obj.balance.toString(10),
+      //       formateBalance: new BN(obj.balance.toString(10)).dividedBy(BIG_TEN.pow(tokenInfo.decimals)).toString(10),
+      //       coins: obj.coins.sort((a, b) => { return b.balance - a.balance })
+      //     })
+      //   } else {
+      //     balanceList.push({
+      //       symbol,
+      //       balance: obj.balance.toString(10),
+      //       formateBalance: new BN(obj.balance.toString(10)).dividedBy(BIG_TEN.pow(symbol === 'SCALE' ? 6 : tokenInfo.decimals)).toString(10),
+      //       coins: obj.coins.sort((a, b) => { return b.balance - a.balance })
+      //     })
+      //   }
+      //   dispatch(setBalanceList(JSON.stringify(balanceList) || '[]')) // 存 balanceList
 
-        balanceList.forEach(v => {
-          if (v.symbol === 'SCALE') {
-            setScaleBalance(keepDecimal2(v.formateBalance))
-          }
-        })
-      })
-    }
+      //   balanceList.forEach(v => {
+      //     if (v.symbol === 'SCALE') {
+      //       setScaleBalance(keepDecimal2(v.formateBalance))
+      //     }
+      //   })
+      // })
+    // }
 
 
     if (account) {
       API.getAccountInfo(account).then(result => {
-        // result.data.margin_total = keepDecimal2((new BigNumber(result.data.margin_total).times(formatTenDecimalNum(-6))).toString(10))
         dispatch(setUserInfo(result.data));
       });
     }
-  }, [account, dispatch, provider, providerValue, status, wallet])
+  }, [wallet01])
+
+  const getBalanceList01 = async () => {
+    const fullnodeProvider = new JsonRpcProvider(new Connection({
+      fullnode: wallet01.chain.rpcUrl
+    }))
+
+    // 存 balanceList
+    let [scaleRP, suiRP] = await Promise.all([
+      fullnodeProvider.getCoins({
+        owner: wallet01.address,
+        coinType: `${CONIN_PACKAGE_OBJECTID}::scale::SCALE`
+      }),
+      fullnodeProvider.getCoins({
+        owner: wallet01.address,
+        coinType: `0x2::sui::SUI`
+      })
+    ])
+
+    let scaleBalance = 0
+    scaleRP.data.forEach(v => {
+      scaleBalance = scaleBalance - 0 + (v.balance - 0)
+    })
+    scaleRP = {
+      ...scaleRP,
+      symbol: 'SCALE',
+      formateBalance: new BN(scaleBalance).dividedBy(BIG_TEN.pow(6)).toString(10)
+    }
+    suiRP = {
+      ...suiRP,
+      symbol: 'Sui',
+      formateBalance: new BN(balance).dividedBy(BIG_TEN.pow(9)).toString(10)
+    }
+    const balanceList = [suiRP, scaleRP]
+    dispatch(setBalanceList(JSON.stringify(balanceList) || '[]')) // 存 balanceList
+  }
+
+  const getAccount01 = async () => {
+    const fullnodeProvider = new JsonRpcProvider(new Connection({
+      fullnode: wallet01.chain.rpcUrl
+    }))
+    // 获取account
+    const { data: objectLists } = await fullnodeProvider.getOwnedObjects({
+      owner: wallet01.address,
+      options: { showType: true, showDisplay: true, showContent: true }
+    })
+    objectLists.forEach(v => {
+      if (v.data.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
+        dispatch(setAccount(v.data.objectId || ''))  // 存 account
+      }
+    })
+  }
 
 
   const handleOk = async () => {
@@ -169,7 +248,7 @@ function Header() {
     const scaleObjectIds = getTokenObjectIds(storeBalanceList || '[]', 'SCALE').slice(0, 1)
     if (modalActive === 'deposit') {
       try {
-        const rp = await deposit(wallet, account, formatAmount, scaleObjectIds)
+        const rp = await deposit(wallet01, account, formatAmount, scaleObjectIds)
 
         if (rp.confirmedLocalExecution) {
           messageApi.open({
@@ -196,7 +275,7 @@ function Header() {
       }
     } else if (modalActive === 'withdraw') {
       try {
-        const rp = await withdraw(wallet, account, formatAmount)
+        const rp = await withdraw(wallet01, account, formatAmount)
         if (rp.confirmedLocalExecution === 'success') {
           messageApi.open({
             type: 'success',
@@ -253,12 +332,12 @@ function Header() {
     setInputValue(e.target.value);
   };
   const handleLogOut = useCallback(async () => {
-    if (!wallet) return
-    const asd = await wallet.disconnect()
+    if (!wallet01) return
+    const asd = await wallet01.disconnect()
     console.log('asd', asd)
     dispatch(setAccount(''))
     dispatch(setAddress(''))  // 存 address
-  }, [dispatch, wallet])
+  }, [dispatch, wallet01])
 
   const content = (
     <div className="header-popover-content">
@@ -322,13 +401,13 @@ function Header() {
             </p>
           </div> */}
             <div>
-              {!wallet ? (
-                <SignInButton>
-                  <span className="connect-btn mui-fl-vert">
+              {address === '' ? (
+                <ConnectButton className="connect-btn ">
+                  <span className='mui-fl-vert'>
                     Connect
                     <i className="mico-arrow-right-white" />
                   </span>
-                </SignInButton>
+                </ConnectButton>
               ) : (
                 <Popover placement="bottom" content={content} trigger="click">
                   <div className="connect-btn address-btn mui-fl-vert taplight">

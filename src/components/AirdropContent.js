@@ -1,21 +1,32 @@
-import { ethos, SignInButton } from "ethos-connect";
+import { JsonRpcProvider, Connection } from '@mysten/sui.js'
+import { ConnectButton, useAccountBalance, useWallet, SuiMainnetChain } from "@suiet/wallet-kit";
 import React, { useEffect, useState, useRef } from 'react'
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, message } from 'antd'
-import { formatAddress } from './../utils/filter'
+import BigNumber from 'bignumber.js'
 
+import { setAccount, setBalanceList } from './../store/action'
+import { formatAddress } from './../utils/filter'
+import { PACKAGE_OBJECTID, CONIN_PACKAGE_OBJECTID } from './../utils/token'
 import { airdrop } from './../utils/sui'
+
 import './../assets/css/components/airdrop-content.css'
 import scaleTxtImg from './../assets/img/scale-txt.png'
 import airdropStep1 from './../assets/img/airdrop-01.png'
 import airdropStep2 from './../assets/img/airdrop-02.png'
 import airdropStep3 from './../assets/img/airdrop-03.png'
 
+const BN = BigNumber.clone({ ROUNDING_MODE: 1, DECIMAL_PLACES: 9 })
+const BIG_TEN = new BigNumber(10)
+
 
 function AirdropContent() {
   const [messageApi, contextHolder] = message.useMessage()
+  const wallet01 = useWallet()
+  const { balance } = useAccountBalance()
+  const dispatch = useDispatch();
 
-  const { wallet } = ethos.useWallet();
   const [step, setStep] = useState(1)
   const [address, setAddress] = useState(false)
   const [btnLoading, setBtnLoading] = useState(false)
@@ -23,60 +34,72 @@ function AirdropContent() {
   const [scaleBalance, setScaleBalance] = useState('')
 
   const balanceListRef = useRef([]);
-  useEffect(() => {
-    setAddress(wallet?.address)
+  
+  const getBalanceList01 = async () => {
+    const fullnodeProvider = new JsonRpcProvider(new Connection({
+      fullnode: wallet01.chain.rpcUrl
+    }))
 
-    const { tokens } = wallet?.contents || { tokens: {} };
-    const _balanceList = Object.keys(tokens).map(v => {
-      const obj = tokens[v];
-      const symbol = v.substring(v.lastIndexOf(':') + 1);
-      if (symbol === 'SCALE') {
-        setScaleBalance(obj.balance.toString(10))
+    // 存 balanceList
+    let [scaleRP, suiRP] = await Promise.all([
+      fullnodeProvider.getCoins({
+        owner: wallet01.address,
+        coinType: `${CONIN_PACKAGE_OBJECTID}::scale::SCALE`
+      }),
+      fullnodeProvider.getCoins({
+        owner: wallet01.address,
+        coinType: `0x2::sui::SUI`
+      })
+    ])
+
+    let scaleBalance = 0
+    scaleRP.data.forEach(v => {
+      scaleBalance = scaleBalance - 0 + (v.balance - 0)
+    })
+    setScaleBalance(scaleBalance)
+    scaleRP = {
+      ...scaleRP,
+      symbol: 'SCALE',
+      formateBalance: new BN(scaleBalance).dividedBy(BIG_TEN.pow(6)).toString(10)
+    }
+    suiRP = {
+      ...suiRP,
+      symbol: 'Sui',
+      formateBalance: new BN(balance).dividedBy(BIG_TEN.pow(9)).toString(10)
+    }
+    const balanceList = [suiRP, scaleRP]
+    dispatch(setBalanceList(JSON.stringify(balanceList) || '[]')) // 存 balanceList
+  }
+
+  useEffect(() => {
+    if (wallet01.connected) {
+      if (wallet01.chain.id !== SuiMainnetChain.id) {
+        wallet01.disconnect()
+        messageApi.open({
+          type: 'warning',
+          content: 'Please switch your wallet to mainnet',
+          style: {
+            marginTop: 77
+          }
+        })
+        return
       }
-      return {
-        symbol,
-        balance: obj.balance.toString(10),
-        coins: obj.coins.sort((a, b) => { return b.balance - a.balance }),
-      };
-    });
+      setAddress(wallet01?.address)
+      getBalanceList01()
+    }
+
     if (address) {
       setStep(2);
     }
-    balanceListRef.current = _balanceList;
-  }, [address, scaleBalance, wallet]);
+  }, [address, wallet01, getBalanceList01]);
 
-  // const balanceList = balanceListRef.current;
-
-  const claimSUI = async () => {
-    if (!wallet) return;
-    setSuiBtnLoading(true)
-    try {
-      await ethos.dripSui({ address: wallet.address });
-      messageApi.open({
-        type: 'success',
-        content: 'Claim SUI successful.',
-        style: {
-          marginTop: 77
-        }
-      })
-    } catch (e) {
-      messageApi.open({
-        type: 'warning',
-        content: 'Too many requests Please try again later.',
-        style: {
-          marginTop: 77
-        }
-      })
-    }
-    setSuiBtnLoading(false)
-  }
-
+  
   const claimScale = async () => {
-    if (!wallet && !address) return
+    if (!wallet01 && !address) return
     setBtnLoading(true)
     try {
       // const suiObjectIds = getTokenObjectIds(JSON.stringify(balanceList), 'SUI')
-      const rp = await airdrop(wallet)
+      const rp = await airdrop(wallet01)
       if (rp?.confirmedLocalExecution) {
         messageApi.open({
           type: 'success',
@@ -134,11 +157,9 @@ function AirdropContent() {
                         { formatAddress(address) }
                       </span>
                     </Button> :
-                    <SignInButton>
-                      <p className="sty-airdrop-button connect-wallet ant-btn ant-btn-primary mui-fl-central">
-                        Connect Wallet
-                      </p>
-                    </SignInButton>
+                    <ConnectButton className="sty-airdrop-button connect-wallet ant-btn ant-btn-primary mui-fl-central">
+                      Connect Wallet
+                    </ConnectButton>
                 }
               </div>
             </li>
@@ -160,7 +181,7 @@ function AirdropContent() {
               </div>
             </li>
             <li className='mui-fl-col mui-fl-btw'>
-              <p>Once you've collected it, come and start your trading！</p>
+              <p>Once you've collected it, come and start your trading!</p>
               <div>
                 {
                   scaleBalance ? 

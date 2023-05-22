@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { CONIN_MODULE, CONIN_PACKAGE_OBJECTID, CONIN_RESERVE, PACKAGE_OBJECTID, MODULE, TYPE, ORACLE_ROOT, MARKET_LIST, MARKET } from './token'
 import { formatTenDecimalNum } from './filter'
-import { TransactionBlock } from 'ethos-connect'
+import { TransactionBlock } from '@mysten/sui.js'
 
 // 空投
 export const airdrop = async (wallet) => {

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@mysten/sui.js": "^0.30.0",
+    "@mysten/sui.js": "^0.34.0",
     "@reduxjs/toolkit": "^1.9.3",
     "@suiet/wallet-kit": "^0.2.11",
     "@testing-library/jest-dom": "^5.14.1",
