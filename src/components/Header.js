@@ -179,7 +179,7 @@ function Header() {
         dispatch(setUserInfo(result.data));
       });
     }
-  }, [wallet01])
+  }, [wallet01, account])
 
   const getBalanceList01 = async () => {
     const fullnodeProvider = new JsonRpcProvider(new Connection({
@@ -227,7 +227,7 @@ function Header() {
     })
     objectLists.forEach(v => {
       if (v.data.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
-        dispatch(setAccount(v.data.objectId || ''))  // 存 account
+        dispatch(setAccount(v.data.content.fields.account_id || ''))  // 存 account
       }
     })
   }
@@ -334,7 +334,6 @@ function Header() {
   const handleLogOut = useCallback(async () => {
     if (!wallet01) return
     const asd = await wallet01.disconnect()
-    console.log('asd', asd)
     dispatch(setAccount(''))
     dispatch(setAddress(''))  // 存 address
   }, [dispatch, wallet01])

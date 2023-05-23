@@ -143,7 +143,7 @@ function TradeForm() {
       })
       objectLists.forEach(v => {
         if (v.data.type === `${PACKAGE_OBJECTID}::account::UserAccount`) {
-          dispatch(setAccount(v.data.objectId || ''))  // 存 account
+          dispatch(setAccount(v.data.content.fields.account_id || ''))  // 存 account
         }
       })
     } else {
