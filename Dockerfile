@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:18-alpine
 LABEL MAINTAINER="tttlkkkl <lihuaio.com@gmail.com>"
 ENV TZ "Asia/Shanghai"
 ENV TERM xterm
