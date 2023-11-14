@@ -1,7 +1,7 @@
-version: '2'
+version: '3.1'
 services:
   influxdb:
-    image: tttlkkkl/sui_web:v2023040901
+    build: .
     restart: always
     container_name: scale-web
     ports:
